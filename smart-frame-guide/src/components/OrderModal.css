@@ -1,0 +1,175 @@
+.order-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* Higher than CartWidget */
+    backdrop-filter: blur(4px);
+}
+
+.order-modal-container {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.order-modal-header {
+    background: #f8f9fa;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.order-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.order-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.order-modal-close:hover {
+    color: #e53e3e;
+}
+
+.order-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    text-align: right;
+    /* RTL alignment for Arabic */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-align: right;
+    /* RTL input */
+    direction: rtl;
+    /* RTL direction */
+}
+
+/* Fix for select placeholder styling */
+.form-group select option {
+    text-align: right;
+}
+
+.delivery-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.delivery-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    flex-direction: row-reverse;
+    /* For RTL checkbox alignment */
+    justify-content: flex-end;
+    /* Align to right */
+}
+
+.delivery-option.selected {
+    border-color: #3182ce;
+    background: #ebf8ff;
+}
+
+.order-summary {
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px dashed #cbd5e0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #4a5568;
+    flex-direction: row-reverse;
+    /* RTL labels */
+}
+
+.summary-row.total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2d3748;
+}
+
+.submit-order-btn {
+    width: 100%;
+    padding: 12px;
+    background: #38a169;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-order-btn:hover {
+    background: #2f855a;
+}

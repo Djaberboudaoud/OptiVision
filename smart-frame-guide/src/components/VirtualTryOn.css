@@ -1,0 +1,627 @@
+/**
+ * Virtual Try-On Styles
+ * Real-time face tracking with MediaPipe + Canvas overlay
+ */
+
+.virtual-tryon-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Start View */
+.tryon-start-view {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.tryon-header {
+  text-align: center;
+}
+
+.tryon-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.tryon-header p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Preview Section */
+.tryon-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(255, 0, 127, 0.05) 100%);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.preview-image {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.preview-info h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.preview-info p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.specs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Floating Elements Wrapper - Warby Parker Style */
+.virtual-try-on_vtoFloatingElementsWrapper__ugBOJ {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  z-index: 40;
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Refit Button - Warby Parker Style */
+.base-button_core__2MWzV {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.base-button_pill__Ev5jb {
+  border-radius: 24px;
+}
+
+.base-button_white__bajcz {
+  background-color: white;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.base-button_white__bajcz:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+.base-button_small__CXjMx {
+  padding: 8px 16px;
+  height: 36px;
+  font-size: 13px;
+}
+
+.virtual-try-on_refitButton__OxXdc {
+  width: 100%;
+  min-width: 120px;
+}
+
+.button_loadingOverlay__M7YRG {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.button_small__V9PlX {
+  font-size: 13px;
+}
+
+.wp-inline {
+  display: inline;
+}
+
+.wp-font-semibold {
+  font-weight: 600;
+}
+
+.ui-button-text_base__Ve_jy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wp-uibutton200 {
+  font-size: 14px;
+}
+
+/* Icon Button - Heart */
+.icon-button_core__dCHzh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.icon-button_circle__SxHMS {
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+}
+
+.icon-button_small__j4eMD {
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+}
+
+.icon-button_white__2LYb0 {
+  background-color: white;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.icon-button_white__2LYb0:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+}
+
+.favorite-heart-round_button__PhIjF {
+  position: relative;
+}
+
+.favorite-heart-round_icon__m7CCc {
+  width: 18px;
+  height: 17px;
+  fill: currentColor;
+  transition: all 0.2s ease;
+}
+
+.favorite-heart-round_button__PhIjF:active .favorite-heart-round_icon__m7CCc {
+  transform: scale(1.2);
+  fill: #ff6b9d;
+}
+
+/* Notifications Container */
+.base-notification_notificationViewport__nSGPM {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Favorite Heart Wrapper */
+.virtual-try-on_vtoFavoriteHeartWrapper__3QMsq {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.start-btn {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #00d9ff 0%, #00b8d4 100%);
+  color: #000;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Glasses Selector */
+.glasses-selector-section {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glasses-selector-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px;
+}
+
+.glasses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.glasses-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.glasses-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.glasses-card span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 4px;
+  font-size: 11px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.glasses-card:hover {
+  border-color: #00d9ff;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
+}
+
+.glasses-card:hover span,
+.glasses-card.active span {
+  opacity: 1;
+}
+
+.glasses-card.active {
+  border-color: #00d9ff;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+}
+
+.glasses-card.active img {
+  opacity: 1;
+}
+
+/* Active Camera View */
+.tryon-active-view {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  margin-bottom: 16px;
+}
+
+/* Webcam video layer - behind everything */
+.tryon-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transform: scaleX(-1);
+  /* Mirror for selfie view */
+}
+
+/* Three.js canvas overlay - on top of video */
+.tryon-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  /* Allow clicks through to video */
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Settings Panel */
+.settings-panel {
+  position: absolute;
+  bottom: 80px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 10;
+  min-width: 200px;
+  backdrop-filter: blur(10px);
+}
+
+.settings-panel h4 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.slider-group label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.slider-group input[type='range'] {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider-group input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #00d9ff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
+
+.slider-group input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #00d9ff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
+
+.slider-group span {
+  font-size: 12px;
+  color: #00d9ff;
+  font-weight: 600;
+}
+
+/* Controls */
+.tryon-controls {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 20;
+}
+
+.control-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 217, 255, 0.2);
+  border: 1px solid rgba(0, 217, 255, 0.4);
+  color: #00d9ff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.control-btn:hover {
+  background: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
+}
+
+/* Loading State */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 50;
+  border-radius: 16px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 217, 255, 0.2);
+  border-top-color: #00d9ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-overlay p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+/* Error Alert */
+.error-alert {
+  background: rgba(255, 67, 67, 0.1);
+  border-color: rgba(255, 67, 67, 0.3);
+  color: #ff4343;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tryon-preview {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .glasses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .settings-panel {
+    right: 8px;
+    bottom: 70px;
+  }
+
+  .tryon-active-view {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (max-width: 480px) {
+  .virtual-tryon-container {
+    padding: 12px;
+  }
+
+  .tryon-header h2 {
+    font-size: 24px;
+  }
+
+  .glasses-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .start-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .tryon-controls {
+    flex-direction: column;
+    bottom: 12px;
+    left: 12px;
+    transform: none;
+  }
+
+  .control-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .virtual-tryon-container {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: more) {
+  .glasses-card {
+    border-width: 3px;
+  }
+
+  .control-btn {
+    border-width: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .virtual-tryon-container,
+  .start-btn,
+  .glasses-card,
+  .control-btn,
+  .spinner {
+    animation: none;
+    transition: none;
+  }
+}

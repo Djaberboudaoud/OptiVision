@@ -1,0 +1,212 @@
+/* WebARTryOn - Production AR glasses try-on styles */
+
+.webar-tryon-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #0a0a0a;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.webar-tryon-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%;
+    /* 4:3 aspect ratio */
+}
+
+/* Mirror the video/canvas horizontally so it behaves like a real mirror */
+.mirrorX {
+    transform: rotateY(180deg);
+}
+
+/* React Three Fiber canvas (3D overlay) */
+.webar-canvas-three {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2;
+}
+
+/* WebARRocksFace canvas (video feed) */
+.webar-canvas-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Loading overlay */
+.webar-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+    color: #fff;
+}
+
+.webar-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #00d9ff;
+    border-radius: 50%;
+    animation: webar-spin 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes webar-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.webar-loading-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Error overlay */
+.webar-error-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10;
+    color: #ff4444;
+    padding: 24px;
+    text-align: center;
+}
+
+.webar-error-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.webar-error-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 300px;
+}
+
+/* Controls bar */
+.webar-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.webar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.webar-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.webar-btn--primary {
+    background: rgba(0, 217, 255, 0.15);
+    border-color: rgba(0, 217, 255, 0.3);
+    color: #00d9ff;
+}
+
+.webar-btn--primary:hover {
+    background: rgba(0, 217, 255, 0.25);
+}
+
+.webar-btn--danger {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: rgba(255, 68, 68, 0.25);
+    color: #ff6b6b;
+}
+
+.webar-btn--danger:hover {
+    background: rgba(255, 68, 68, 0.2);
+}
+
+/* Status indicator */
+.webar-status {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.webar-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: webar-pulse 2s ease-in-out infinite;
+}
+
+.webar-status-dot--paused {
+    background: #fbbf24;
+    animation: none;
+}
+
+.webar-status-dot--error {
+    background: #f87171;
+    animation: none;
+}
+
+@keyframes webar-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}

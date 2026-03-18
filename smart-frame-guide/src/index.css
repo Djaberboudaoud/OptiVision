@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OptiVision - Eyeglasses Recommendation Platform Design System */
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 224 71% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 4%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 243 75% 59%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --glass-bg: 0 0% 100% / 0.8;
+    --glass-border: 0 0% 100% / 0.2;
+    --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(258 90% 66%));
+    --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%), hsl(25 95% 53%));
+    --gradient-hero: linear-gradient(180deg, hsl(220 20% 98%) 0%, hsl(220 30% 95%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(224 71% 4% / 0.08);
+    --shadow-glow: 0 0 40px -10px hsl(243 75% 59% / 0.3);
+    --shadow-card: 0 1px 3px hsl(224 71% 4% / 0.05), 0 10px 40px -10px hsl(224 71% 4% / 0.1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 224 71% 4%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 243 75% 59%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 50% 8%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 50% 8%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 243 75% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 224 30% 15%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 224 30% 15%;
+    --muted-foreground: 220 9% 60%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 224 30% 18%;
+    --input: 224 30% 18%;
+    --ring: 243 75% 65%;
+
+    --gradient-hero: linear-gradient(180deg, hsl(224 71% 4%) 0%, hsl(224 50% 8%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px -10px hsl(243 75% 65% / 0.4);
+    --shadow-card: 0 1px 3px hsl(0 0% 0% / 0.2), 0 10px 40px -10px hsl(0 0% 0% / 0.4);
+
+    --sidebar-background: 224 50% 8%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 243 75% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 30% 15%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 224 30% 18%;
+    --sidebar-ring: 243 75% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+    box-shadow: var(--shadow-card);
+  }
+
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .step-indicator {
+    @apply flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all duration-300;
+  }
+
+  .step-indicator-active {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground shadow-lg;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .step-indicator-completed {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .step-indicator-pending {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  .upload-zone {
+    @apply relative border-2 border-dashed border-border rounded-2xl p-8 transition-all duration-300 cursor-pointer;
+  }
+
+  .upload-zone:hover {
+    @apply border-primary/50 bg-primary/5;
+  }
+
+  .upload-zone-active {
+    @apply border-primary bg-primary/10;
+  }
+
+  .glasses-card {
+    @apply glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02];
+  }
+
+  .glasses-card:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .chat-bubble {
+    @apply rounded-2xl px-4 py-3 max-w-[80%];
+  }
+
+  .chat-bubble-user {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground ml-auto rounded-br-md;
+  }
+
+  .chat-bubble-assistant {
+    @apply bg-muted text-foreground mr-auto rounded-bl-md;
+  }
+
+  .landmark-dot {
+    @apply absolute w-2 h-2 rounded-full bg-accent;
+    box-shadow: 0 0 8px hsl(38 92% 50% / 0.6);
+  }
+
+  .face-outline {
+    @apply absolute border-2 border-primary rounded-full opacity-60;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
