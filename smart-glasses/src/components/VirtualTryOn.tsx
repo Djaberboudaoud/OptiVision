@@ -290,7 +290,7 @@ export const VirtualTryOn: React.FC<VirtualTryOnProps> = ({
       try {
         const loader = new GLTFLoader();
         // Load from backend caders directory
-        const modelPath = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/glasses_models/${modelUrl}`;
+        const modelPath = `/glasses_models/${modelUrl}`;
         const gltf = await loader.loadAsync(modelPath);
         const model = gltf.scene;
 

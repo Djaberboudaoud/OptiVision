@@ -156,13 +156,13 @@ export async function deleteGlasses(id: number) {
 /** Get full URL for a glasses photo */
 export function getPhotoUrl(imagePath: string | null): string | null {
     if (!imagePath) return null;
-    return `${API_BASE}/glasses_photos/${imagePath}`;
+    return `/glasses_photos/${imagePath}`;
 }
 
 /** Get full URL for a glasses 3D model */
 export function getModelUrl(modelPath: string | null): string | null {
     if (!modelPath) return null;
-    return `${API_BASE}/glasses_models/${modelPath}`;
+    return `/glasses_models/${modelPath}`;
 }
 
 // ─── Orders ─────────────────────────────────────────────────

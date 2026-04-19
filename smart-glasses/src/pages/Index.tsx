@@ -41,7 +41,7 @@ const Index = () => {
             id: item.id.toString(),
             name: item.glasses_name,
             brand: item.brand || 'Custom',
-            image: item.image_path ? `${API_BASE}/glasses_photos/${item.image_path}` : 'https://placehold.co/400x300',
+            image: item.image_path ? `/glasses_photos/${item.image_path}` : 'https://placehold.co/400x300',
             frameType: (item.frame_shape || item.frame_type || 'rectangle').toLowerCase(),
             material: item.material || 'Acetate',
             mbsRange: [130, 140], // Default
@@ -49,7 +49,7 @@ const Index = () => {
             price: item.selling_price,
             colors: item.frame_color ? [item.frame_color] : ['Black'],
             modelFile: item.model_path, // Path relative to glasses_models/
-            webarModelFile: item.model_path ? `${API_BASE}/glasses_models/${item.model_path}` : undefined,
+            webarModelFile: item.model_path ? `/glasses_models/${item.model_path}` : undefined,
           }));
           setApiGlasses(transformedGlasses);
         }
@@ -69,7 +69,7 @@ const Index = () => {
           id: item.id.toString(),
           name: item.glasses_name,
           brand: item.brand || 'Custom',
-          image: item.image_path ? `${API_BASE}/glasses_photos/${item.image_path}` : 'https://placehold.co/400x300',
+          image: item.image_path ? `/glasses_photos/${item.image_path}` : 'https://placehold.co/400x300',
           frameType: (item.frame_shape || item.frame_type || 'rectangle').toLowerCase(),
           material: item.material || 'Acetate',
           mbsRange: [130, 140] as [number, number],

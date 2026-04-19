@@ -233,7 +233,7 @@ export function ChatAssistant({ onFilterRequest }: ChatAssistantProps) {
                         <div key={g.id} className="flex items-center gap-2 p-2 rounded-lg bg-background/50 border border-border/50">
                           {g.image_path && (
                             <img
-                              src={`${API_BASE}/glasses_photos/${g.image_path}`}
+                              src={`/glasses_photos/${g.image_path}`}
                               alt={g.glasses_name}
                               className="w-12 h-12 object-cover rounded-md"
                               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
