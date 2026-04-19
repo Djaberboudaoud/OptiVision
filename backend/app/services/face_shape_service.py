@@ -1,7 +1,7 @@
 import logging
 import tempfile
 import os
-from typing import Dict
+from typing import Dict, Any
 
 try:
     import cv2
@@ -71,7 +71,7 @@ class FaceShapeService:
 
     # ── Classify face shape from 468 landmarks ───────────────────
     def _classify_face_shape(
-        self, landmarks: np.ndarray, img_w: int, img_h: int
+        self, landmarks: Any, img_w: int, img_h: int
     ) -> Dict:
         """
         Classify using geometric ratios.
