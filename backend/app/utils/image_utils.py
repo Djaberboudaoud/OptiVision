@@ -3,7 +3,7 @@ Image processing utilities.
 """
 import io
 import logging
-from typing import Tuple
+from typing import Tuple, Any
 
 try:
     import cv2
@@ -50,7 +50,7 @@ def validate_image_file(file_content: bytes, filename: str) -> bool:
         return False
 
 
-def load_and_preprocess_image(file_content: bytes) -> np.ndarray:
+def load_and_preprocess_image(file_content: bytes) -> Any:
     """
     Load and preprocess image for model inference.
     
@@ -91,7 +91,7 @@ def load_and_preprocess_image(file_content: bytes) -> np.ndarray:
         raise ValueError(f"Failed to process image: {str(e)}")
 
 
-def validate_image_dimensions(image_array: np.ndarray) -> bool:
+def validate_image_dimensions(image_array: Any) -> bool:
     """
     Validate preprocessed image dimensions.
     
