@@ -45,8 +45,8 @@ class Settings(BaseSettings):
     ADMIN_DEFAULT_USERNAME: str = "admin"
     ADMIN_DEFAULT_PASSWORD: str = "admin123"
     
-    # OpenAI
-    GEMINI_API_KEY: str = "AIzaSyA4xSq6uttAqor-IQeBhRIfyoRPVZCf1U0"
+    # Gemini AI
+    GEMINI_API_KEY: str | None = None
 
     
     # ML Model
