@@ -143,19 +143,19 @@ async def search_glasses(filters: Dict[str, Any], db: AsyncSession):
     query = select(GlassesModel)
 
     if "frame_shape" in filters:
-        query = query.where(GlassesModel.frame_shape == filters["frame_shape"])
+        query = query.where(GlassesModel.frame_shape.ilike(f"{filters['frame_shape']}"))
 
     if "frame_type" in filters:
-        query = query.where(GlassesModel.frame_type == filters["frame_type"])
+        query = query.where(GlassesModel.frame_type.ilike(f"{filters['frame_type']}"))
 
     if "material" in filters:
-        query = query.where(GlassesModel.material == filters["material"])
+        query = query.where(GlassesModel.material.ilike(f"{filters['material']}"))
 
     if "frame_color" in filters:
-        query = query.where(GlassesModel.frame_color == filters["frame_color"])
+        query = query.where(GlassesModel.frame_color.ilike(f"{filters['frame_color']}"))
 
     if "gender" in filters:
-        query = query.where(GlassesModel.gender == filters["gender"])
+        query = query.where(GlassesModel.gender.ilike(f"{filters['gender']}"))
 
     if filters.get("anti_blue_light"):
         query = query.where(GlassesModel.anti_blue_light == True)
