@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     CORS_HEADERS: list = ["*"]
     
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres.dyhxhwsfsjhcrhpctmft:192837465ReportingSystem@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres.vpimbcpbjpqujknabzkf:192837465ReportingSystem@aws-0-eu-west-1.pooler.supabase.com:5432/postgres"
     # DATABASE_URL: str = "postgresql+asyncpg://postgres:192837465@localhost:5432/smart_glasses_db"
 
     # JWT Authentication

@@ -5,7 +5,7 @@
 
 // Backend API base URL - adjust based on your environment
 // DIRECT_URL="postgresql://postgres.dyhxhwsfsjhcrhpctmft:[YOUR-PASSWORD]@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://opti-vision-backend.vercel.app';
 
 export interface PredictionResponse {
   face_shape: 'Heart' | 'Oblong' | 'Oval' | 'Round' | 'Square';
