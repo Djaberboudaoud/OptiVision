@@ -5,9 +5,13 @@ import io
 import logging
 from typing import Tuple
 
-import cv2
-import numpy as np
-from PIL import Image
+try:
+    import cv2
+    import numpy as np
+    from PIL import Image
+    _CV_AVAILABLE = True
+except ImportError:
+    _CV_AVAILABLE = False
 
 from app.core.config import settings
 

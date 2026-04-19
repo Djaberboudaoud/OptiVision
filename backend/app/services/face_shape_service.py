@@ -3,11 +3,16 @@ import tempfile
 import os
 from typing import Dict
 
-import cv2
-import numpy as np
-import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
+try:
+    import cv2
+    import numpy as np
+    import mediapipe as mp
+    from mediapipe.tasks import python
+    from mediapipe.tasks.python import vision
+    _CV_AVAILABLE = True
+except ImportError:
+    _CV_AVAILABLE = False
+    mp = None
 
 from app.core.config import settings
 
