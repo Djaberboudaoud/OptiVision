@@ -27,8 +27,15 @@ router = APIRouter(prefix="/api/glasses", tags=["Glasses"])
 BACKEND_ROOT = Path(__file__).parent.parent.parent
 PHOTOS_DIR = BACKEND_ROOT / "glasses_photos"
 MODELS_DIR = BACKEND_ROOT / "glasses_models"
-PHOTOS_DIR.mkdir(exist_ok=True)
-MODELS_DIR.mkdir(exist_ok=True)
+try:
+    PHOTOS_DIR.mkdir(exist_ok=True)
+except OSError:
+    logger.warning("Could not create PHOTOS_DIR (read-only file system)")
+
+try:
+    MODELS_DIR.mkdir(exist_ok=True)
+except OSError:
+    logger.warning("Could not create MODELS_DIR (read-only file system)")
 
 
 def _save_file(upload: UploadFile, dest_dir: Path) -> str:
