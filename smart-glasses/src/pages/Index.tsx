@@ -9,9 +9,11 @@ import TryOnModal from '@/components/TryOnModal';
 import { CartWidget, type CartItem } from '@/components/CartWidget';
 import { ChatAssistant } from '@/components/ChatAssistant';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, X, BookImage } from 'lucide-react';
 import type { AppStep, FaceAnalysisResult } from '@/types/analysis';
 import type { Glasses } from '@/data/glassesData';
+import { SavedScansPage } from '@/components/SavedScansPage';
+import { getScanCount } from '@/services/savedScans';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>('upload');
@@ -28,6 +30,13 @@ const Index = () => {
   const [apiGlasses, setApiGlasses] = useState<Glasses[]>([]);
   const [chatFilteredGlasses, setChatFilteredGlasses] = useState<Glasses[] | null>(null);
   const [activeFilterLabel, setActiveFilterLabel] = useState<string | null>(null);
+  const [showSavedScans, setShowSavedScans] = useState(false);
+  const [savedScanCount, setSavedScanCount] = useState(0);
+
+  // Load saved scan count on mount
+  useEffect(() => {
+    getScanCount().then(setSavedScanCount).catch(() => {});
+  }, [showSavedScans]);
 
   useEffect(() => {
     const fetchGlasses = async () => {
@@ -201,10 +210,29 @@ const Index = () => {
     }
   };
 
+  if (showSavedScans) {
+    return <SavedScansPage onBack={() => setShowSavedScans(false)} />;
+  }
+
   if (showHero) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
+        {/* Saved Scans button in top-right corner of hero */}
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={() => setShowSavedScans(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur border border-white/20 text-white hover:bg-white/20 transition-all text-sm font-medium shadow-lg"
+          >
+            <BookImage className="w-4 h-4" />
+            Saved Scans
+            {savedScanCount > 0 && (
+              <span className="bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {savedScanCount}
+              </span>
+            )}
+          </button>
+        </div>
         <HeroSection onGetStarted={handleGetStarted} />
         <ChatAssistant onFilterRequest={handleChatFilter} />
       </div>

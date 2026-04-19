@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import type { FaceAnalysisResult, Landmark, FaceShape } from '@/types/analysis';
 import { faceShapeDescriptions } from '@/data/glassesData';
 import { predictFaceShape, normalizeBackendFaceShape, type PredictionResponse } from '@/services/api';
+import { saveScan } from '@/services/savedScans';
 
 interface FaceAnalysisProps {
   imageUrl: string;
@@ -519,6 +520,29 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
         setResult(analysisResult);
         setIsLoading(false);
         onAnalysisComplete(analysisResult);
+
+        // ─── Auto-save the scan to IndexedDB ───────────────
+        try {
+          // Convert the image URL to base64 for persistent storage
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          canvas.getContext('2d')!.drawImage(img, 0, 0);
+          const photoDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+          await saveScan({
+            photoDataUrl,
+            faceShape: analysisResult.faceShape,
+            confidence: analysisResult.confidence,
+            mbs: analysisResult.mbs,
+            pupillaryDistance: analysisResult.measurements.pupillaryDistance,
+            faceWidth: analysisResult.measurements.faceWidth,
+            faceHeight: analysisResult.measurements.faceHeight,
+          });
+          console.log('✅ Scan auto-saved to Saved Scans');
+        } catch (saveErr) {
+          console.warn('Could not auto-save scan:', saveErr);
+        }
       } catch (err) {
         setIsLoading(false);
         const errorMsg = err instanceof Error ? err.message : 'Analysis failed';
