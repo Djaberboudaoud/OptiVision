@@ -521,14 +521,26 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
         setIsLoading(false);
         onAnalysisComplete(analysisResult);
 
-        // ─── Auto-save the scan to IndexedDB ───────────────
+        // ─── Auto-save the scan to IndexedDB (works for both webcam & file upload) ───
         try {
-          // Convert the image URL to base64 for persistent storage
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          canvas.getContext('2d')!.drawImage(img, 0, 0);
-          const photoDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          let photoDataUrl: string;
+
+          // If we have the original File object, read it directly — most reliable for webcam blob URLs
+          if (imageFile) {
+            photoDataUrl = await new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(imageFile);
+            });
+          } else {
+            // Fallback: draw img to canvas (works for regular file uploads)
+            const saveCanvas = document.createElement('canvas');
+            saveCanvas.width = img.width;
+            saveCanvas.height = img.height;
+            saveCanvas.getContext('2d')!.drawImage(img, 0, 0);
+            photoDataUrl = saveCanvas.toDataURL('image/jpeg', 0.85);
+          }
 
           await saveScan({
             photoDataUrl,
