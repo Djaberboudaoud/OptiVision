@@ -1,0 +1,17 @@
+# Exclude large binary assets from the Lambda bundle.
+# These directories contain .glb 3D models and product photos
+# that exceed Vercel's 245 MB Lambda limit.
+# They must be hosted on cloud storage (e.g. Cloudinary / Vercel Blob) in production.
+backend/glasses_models/
+backend/glasses_photos/
+
+# Python cache files
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+
+# Local dev files
+backend/.python-version
+*.bat
+debug_*.txt

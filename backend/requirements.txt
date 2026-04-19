@@ -13,6 +13,5 @@ bcrypt==4.1.2
 # opencv-python-headless==4.8.1.78
 # numpy==1.26.2
 # pillow==10.1.0
-# Chat Assistant API
-openai>=1.0.0
+# Chat Assistant API (calls Gemini directly via httpx)
 httpx>=0.25.0
