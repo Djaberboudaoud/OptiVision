@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 import httpx
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 from app.core.config import settings
 from app.database import get_db
@@ -69,7 +69,7 @@ Allowed filters:
 frame_shape: {FRAME_SHAPES}
 frame_type: {FRAME_TYPES}
 material: {MATERIALS}
-frame_color: {COLORS}
+color: {COLORS}
 gender: {GENDERS}
 
 Boolean filters:
@@ -151,8 +151,17 @@ async def search_glasses(filters: Dict[str, Any], db: AsyncSession):
     if "material" in filters:
         query = query.where(GlassesModel.material.ilike(f"{filters['material']}"))
 
-    if "frame_color" in filters:
-        query = query.where(GlassesModel.frame_color.ilike(f"{filters['frame_color']}"))
+    if "color" in filters:
+        # Some colors in the db use phonetic/french spellings
+        c = filters["color"].lower()
+        if c == "yellow": c = "jone"
+        elif c == "brown": c = "borne"
+        elif c == "white": c = "whait"
+        
+        query = query.where(or_(
+            GlassesModel.frame_color.ilike(f"%{c}%"),
+            GlassesModel.lens_color.ilike(f"%{c}%")
+        ))
 
     if "gender" in filters:
         query = query.where(GlassesModel.gender.ilike(f"{filters['gender']}"))
