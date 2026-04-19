@@ -3,7 +3,7 @@
  * Backend at http://localhost:8001
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL || "https://opti-vision-backend.vercel.app";
 const TOKEN_KEY = "djaber_admin_token";
 
 // ─── Token helpers ──────────────────────────────────────────

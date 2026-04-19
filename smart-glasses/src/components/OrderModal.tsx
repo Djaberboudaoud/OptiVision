@@ -100,7 +100,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, cartItems }) =
         setSubmitError('');
 
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const API_BASE = import.meta.env.VITE_API_URL || 'https://opti-vision-backend.vercel.app';
             const response = await fetch(`${API_BASE}/api/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

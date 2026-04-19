@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Backend URL for serving model assets
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://opti-vision-backend.vercel.app';
 
 interface JeelizCanvasProps {
     /** JSON model (BufferGeometry frame + lenses) */
