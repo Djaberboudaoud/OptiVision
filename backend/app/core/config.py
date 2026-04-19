@@ -22,7 +22,12 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     
     # CORS
-    CORS_ORIGINS: list = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
+    CORS_ORIGINS: list = [
+        "http://localhost:5173", 
+        "http://localhost:3000", 
+        "http://localhost:8080",
+        "https://opti-vision-ashen.vercel.app"
+    ]
     CORS_CREDENTIALS: bool = True
     CORS_METHODS: list = ["*"]
     CORS_HEADERS: list = ["*"]
