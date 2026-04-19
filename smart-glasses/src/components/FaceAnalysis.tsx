@@ -494,8 +494,8 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
         await new Promise((resolve) => setTimeout(resolve, 800));
 
         const uiLandmarks: Landmark[] = [
-          { x: leftEye.x * 100, y: leftEye.y * 100, label: 'Left Eye' },
-          { x: rightEye.x * 100, y: rightEye.y * 100, label: 'Right Eye' },
+          { x: leftPupil.x * 100, y: leftPupil.y * 100, label: 'Left Eye' },
+          { x: rightPupil.x * 100, y: rightPupil.y * 100, label: 'Right Eye' },
           { x: noseBridge.x * 100, y: noseBridge.y * 100, label: 'Nose Bridge' },
           { x: landmarks[1].x * 100, y: landmarks[1].y * 100, label: 'Nose Tip' },
           { x: leftTemple.x * 100, y: leftTemple.y * 100, label: 'Left Temple' },
