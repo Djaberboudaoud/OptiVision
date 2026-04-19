@@ -58,6 +58,9 @@ class ChatResponse(BaseModel):
 # ─── AI call to Gemini ────────────────────────────────────────
 
 async def extract_filters_with_ai(user_message: str):
+    if not settings.GEMINI_API_KEY:
+        logger.error("GEMINI_API_KEY is missing from environment variables.")
+        raise HTTPException(status_code=500, detail="Gemini API Key is not configured on the server")
 
     prompt = f"""
 You are an AI that extracts structured filters for a glasses search database.
