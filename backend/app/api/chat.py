@@ -78,19 +78,23 @@ Price filters:
 min_price
 max_price
 
+Additional:
+order_by: "price_asc" or "price_desc"
+limit: Integer (e.g. 1 if the user asks for a singular item like "أرخص نظارة" or 5-10 if they ask for a plural list like "أرخص نظارات")
+
 User message:
 {user_message}
 
 Return ONLY JSON.
-Example:
+Example for "cheapest women's glasses":
 {{
- "frame_shape": "round",
- "gender": "male",
- "max_price": 100
+ "gender": "female",
+ "order_by": "price_asc",
+ "limit": 5
 }}
 """
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={settings.GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
 
     payload = {
         "contents": [
@@ -102,11 +106,12 @@ Example:
         ]
     }
 
-    async with httpx.AsyncClient(timeout=30) as client:
+    async with httpx.AsyncClient(timeout=60) as client:
 
         response = await client.post(url, json=payload)
 
     if response.status_code != 200:
+        logger.error("Gemini API error %s: %s", response.status_code, response.text)
         raise HTTPException(status_code=500, detail="AI request failed")
 
     data = response.json()
@@ -163,6 +168,15 @@ async def search_glasses(filters: Dict[str, Any], db: AsyncSession):
 
     if "max_price" in filters:
         query = query.where(GlassesModel.selling_price <= filters["max_price"])
+
+    if "order_by" in filters:
+        if filters["order_by"] == "price_asc":
+            query = query.order_by(GlassesModel.selling_price.asc())
+        elif filters["order_by"] == "price_desc":
+            query = query.order_by(GlassesModel.selling_price.desc())
+            
+    if "limit" in filters:
+        query = query.limit(filters["limit"])
 
     result = await db.execute(query)
 

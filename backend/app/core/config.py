@@ -28,8 +28,9 @@ class Settings(BaseSettings):
     CORS_HEADERS: list = ["*"]
     
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres.dyhxhwsfsjhcrhpctmft:192837465ReportingSystem@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
-    
+    # DATABASE_URL: str = "postgresql+asyncpg://postgres.dyhxhwsfsjhcrhpctmft:192837465ReportingSystem@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:192837465@localhost:5432/smart_glasses_db"
+
     # JWT Authentication
     JWT_SECRET_KEY: str = "super-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"
@@ -37,10 +38,10 @@ class Settings(BaseSettings):
     
     # Default admin seed credentials
     ADMIN_DEFAULT_USERNAME: str = "admin"
-    ADMIN_DEFAULT_PASSWORD: str = "ChangeMe123"
+    ADMIN_DEFAULT_PASSWORD: str = "admin123"
     
     # OpenAI
-    GEMINI_API_KEY: str = "AIzaSyDqihnfHBuyU-Mj_RFpHMY8eelI18FBVIw"
+    GEMINI_API_KEY: str = "AIzaSyA4xSq6uttAqor-IQeBhRIfyoRPVZCf1U0"
 
     
     # ML Model

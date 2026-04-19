@@ -54,7 +54,7 @@ echo        URL: http://localhost:8000
 echo        Docs: http://localhost:8000/docs
 echo.
 cd backend
-start cmd /k "python -m app.main"
+start cmd /k "python main.py"
 echo        ✓ Backend window opened
 cd ..
 

@@ -193,13 +193,13 @@ else:
     logger.warning(f"⚠️  new_caders directory not found: {new_caders_path}")
 
 # Serve uploaded glasses photos
-photos_path = (Path(__file__).parent.parent / "glasses_photos").resolve()
+photos_path = (Path(__file__).parent / "glasses_photos").resolve()
 photos_path.mkdir(exist_ok=True)
 app.mount("/glasses_photos", StaticFiles(directory=str(photos_path), html=False), name="glasses_photos")
 logger.info(f"✅ Mounted glasses_photos directory: {photos_path}")
 
 # Serve uploaded glasses 3D models
-models_upload_path = (Path(__file__).parent.parent / "glasses_models").resolve()
+models_upload_path = (Path(__file__).parent / "glasses_models").resolve()
 models_upload_path.mkdir(exist_ok=True)
 app.mount("/glasses_models", StaticFiles(directory=str(models_upload_path), html=False), name="glasses_models")
 logger.info(f"✅ Mounted glasses_models directory: {models_upload_path}")
@@ -254,7 +254,7 @@ if __name__ == "__main__":
     import uvicorn
     
     uvicorn.run(
-        "app.main:app",
+        "main:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG,
