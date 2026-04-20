@@ -18,6 +18,7 @@ from app.api.glasses import router as glasses_router
 from app.api.orders import router as orders_router
 from app.api.notifications import router as notifications_router
 from app.api.chat import router as chat_router
+from app.api.saved_scans import router as saved_scans_router
 from app.core.config import settings
 from app.services.face_shape_service import get_face_shape_service
 from app.database import engine, Base, async_session
@@ -173,6 +174,7 @@ app.include_router(glasses_router)
 app.include_router(orders_router)
 app.include_router(notifications_router)
 app.include_router(chat_router)
+app.include_router(saved_scans_router)
 
 # Serve .glb files from caders directory
 caders_path = (Path(__file__).parent.parent / "caders").resolve()
