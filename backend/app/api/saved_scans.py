@@ -6,7 +6,7 @@ from sqlalchemy import select, desc
 from app.database import get_db
 from app.models.saved_scan import SavedScan
 from app.schemas.saved_scan import SavedScanCreate, SavedScanResponse
-from app.core.security import get_current_admin
+from app.api.deps import get_current_admin
 
 router = APIRouter(prefix="/saved-scans", tags=["Saved Scans"])
 
