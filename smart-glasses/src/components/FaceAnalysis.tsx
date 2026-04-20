@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import type { FaceAnalysisResult, Landmark, FaceShape } from '@/types/analysis';
 import { faceShapeDescriptions } from '@/data/glassesData';
 import { predictFaceShape, normalizeBackendFaceShape, type PredictionResponse } from '@/services/api';
-import { saveScan } from '@/services/savedScans';
+import { saveScanToBackend } from '@/services/savedScanApi';
 
 interface FaceAnalysisProps {
   imageUrl: string;
@@ -542,7 +542,7 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
             photoDataUrl = saveCanvas.toDataURL('image/jpeg', 0.85);
           }
 
-          await saveScan({
+          await saveScanToBackend({
             photoDataUrl,
             faceShape: analysisResult.faceShape,
             confidence: analysisResult.confidence,
@@ -551,7 +551,7 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
             faceWidth: analysisResult.measurements.faceWidth,
             faceHeight: analysisResult.measurements.faceHeight,
           });
-          console.log('✅ Scan auto-saved to Saved Scans');
+          console.log('✅ Scan auto-saved to Backend Database');
         } catch (saveErr) {
           console.warn('Could not auto-save scan:', saveErr);
         }

@@ -9,7 +9,7 @@ import AdminLogin from "./pages/AdminLogin";
 import GererStock from "./pages/GererStock";
 import AdminOrders from "./pages/AdminOrders";
 import AdminNotifications from "./pages/AdminNotifications";
-import { SavedScansPage } from "./components/SavedScansPage";
+import AdminSavedScans from "./pages/AdminSavedScans";
 
 const queryClient = new QueryClient();
 
@@ -21,13 +21,12 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* Saved Scans */}
-          <Route path="/saved-scans" element={<SavedScansPage onBack={() => window.history.back()} />} />
           {/* Admin routes */}
           <Route path="/DjAbEr/login" element={<AdminLogin />} />
           <Route path="/DjAbEr/gerer_stock" element={<GererStock />} />
           <Route path="/DjAbEr/orders" element={<AdminOrders />} />
           <Route path="/DjAbEr/notifications" element={<AdminNotifications />} />
+          <Route path="/DjAbEr/saved-scans" element={<AdminSavedScans />} />
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
