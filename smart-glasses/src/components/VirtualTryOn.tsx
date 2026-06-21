@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { FaceAnalysisResult } from '../types/analysis';
 import { type Glasses } from '../data/glassesData';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { loadGLTFModel } from '../utils/gltfLoader';
 import './VirtualTryOn.css';
 
 interface VirtualTryOnProps {
@@ -288,11 +288,9 @@ export const VirtualTryOn: React.FC<VirtualTryOnProps> = ({
       }
 
       try {
-        const loader = new GLTFLoader();
         // Load from backend caders directory
         const modelPath = `/glasses_models/${modelUrl}`;
-        const gltf = await loader.loadAsync(modelPath);
-        const model = gltf.scene;
+        const model = await loadGLTFModel(modelPath);
 
         // Use WebAR.rocks-inspired scaling: 78x for glasses model
         // Adjust for different model sizes - if model seems too big, use 0.6-0.8

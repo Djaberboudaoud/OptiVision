@@ -1,0 +1,96 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} % Change to 'french' if you prefer French
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+
+% --- Page Setup ---
+\geometry{a4paper, margin=1in, headheight=14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Smart Frame Guide - Technical Report}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Colors ---
+\definecolor{primary}{RGB}{0, 102, 204}
+
+% --- Title Page ---
+\title{
+    \vspace{2cm}
+    \textbf{\Huge \textcolor{primary}{Smart Frame Guide}}\\
+    \vspace{0.5cm}
+    \textbf{\Large OptiVision Platform}\\
+    \vspace{1.5cm}
+    \Large Technical Project Report \\
+    \vspace{0.5cm}
+    \large AI-Driven Glasses Recommendation and Virtual Try-On Platform
+    \vspace{2cm}
+}
+\author{\textbf{Boudaoud Djaber}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\vspace{1cm}
+
+% --- Section 1: Introduction ---
+\section{Introduction}
+This document serves as the technical report for the development of the \textbf{Smart Frame Guide} (OptiVision) platform. The primary objective of this project is to revolutionize the online eyewear shopping experience by integrating advanced Artificial Intelligence (AI) and Augmented Reality (AR) technologies. 
+
+The platform offers a comprehensive solution that includes real-time face shape analysis, a virtual 3D try-on experience, and an intelligent AI chat assistant that acts as a virtual optician to recommend the most suitable glasses frames for users.
+
+% --- Section 2: System Architecture & Technologies ---
+\section{System Architecture \& Technologies}
+The project is built using a modern decoupled architecture, separating the client-side rendering from the server-side logic and AI processing.
+
+\subsection{Frontend Implementation}
+The client-side application is designed to be highly interactive, responsive, and capable of handling real-time video processing for AR.
+\begin{itemize}[label=\textcolor{primary}{$\bullet$}]
+    \item \textbf{React \& TypeScript:} The core framework used for building the user interface, managing application state, and structuring reusable UI components. TypeScript is used to ensure type safety and reduce runtime errors.
+    \item \textbf{Three.js:} A powerful 3D JavaScript library utilized to render high-quality 3D models of glasses. It handles lighting, materials, and the positioning of the 3D assets in the virtual environment.
+    \item \textbf{Tailwind CSS:} Used for rapid, utility-first styling to create a modern, dynamic, and visually appealing user interface.
+\end{itemize}
+
+\subsection{Backend Architecture}
+The backend serves as the robust API layer that handles data management, user authentication, and AI integration.
+\begin{itemize}[label=\textcolor{primary}{$\bullet$}]
+    \item \textbf{FastAPI (Python):} Chosen for its high performance, asynchronous capabilities, and automatic API documentation generation. It handles all RESTful API requests from the frontend.
+    \item \textbf{SQL Database:} Relational database used for the persistent storage of administrative configurations, user data, saved facial scans, and the inventory of available glasses models.
+\end{itemize}
+
+% --- Section 3: Artificial Intelligence & Computer Vision ---
+\section{Artificial Intelligence \& Computer Vision}
+The core innovation of the Smart Frame Guide lies in its AI and Computer Vision integrations, which power the personalized recommendation and virtual try-on features.
+
+\subsection{Real-Time Face Shape Analysis \& Tracking}
+To accurately recommend frames, the system must first understand the user's unique facial structure and track their movements in real-time.
+\begin{itemize}[label=\textcolor{primary}{$\bullet$}]
+    \item \textbf{MediaPipe:} Utilized for its highly optimized Face Mesh detection. It identifies hundreds of 3D facial landmarks in real-time through the user's webcam, allowing the system to calculate facial proportions and categorize the user's face shape (e.g., Oval, Round, Square, Heart).
+    \item \textbf{Jeeliz FaceFilter / WebAR:} Works in conjunction with Three.js to handle the robust tracking of the face's position and rotation. It provides the anchor points necessary to seamlessly overlay and lock the 3D glasses models onto the user's face as they move.
+\end{itemize}
+
+\subsection{AI-Driven Recommendation Engine \& Chat Assistant}
+The platform features an intelligent assistant that interacts with the user and guides their purchasing decision.
+\begin{itemize}[label=\textcolor{primary}{$\bullet$}]
+    \item \textbf{Google Gemini AI (gemini-2.5-flash):} The Large Language Model (LLM) powering the conversational agent. The Gemini API is integrated into the backend (\texttt{/api/chat/ai-search}) to process natural language queries.
+    \item \textbf{Contextual Recommendations:} The AI agent analyzes the user's detected face shape, processes their specific requests (e.g., "I need blue glasses for reading"), searches the backend SQL inventory, and formulates personalized recommendations. It operates as an expert virtual optician.
+\end{itemize}
+
+% --- Section 4: Conclusion ---
+\section{Conclusion}
+The Smart Frame Guide successfully demonstrates the powerful intersection of Web Development, Augmented Reality, and Artificial Intelligence. By leveraging technologies such as FastAPI, React, Three.js, MediaPipe, and Google's Gemini AI, the project delivers a seamless and highly personalized user experience, effectively solving the common challenges associated with purchasing eyewear online.
+
+\end{document}

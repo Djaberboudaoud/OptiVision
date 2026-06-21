@@ -203,23 +203,4 @@ export async function markNotificationRead(id: number): Promise<Notification> {
     return apiFetch(`/api/notifications/${id}/read`, { method: "PUT" });
 }
 
-// ─── Saved Scans ──────────────────────────────────────────────
-export interface SavedScan {
-    id: number;
-    face_shape: string;
-    confidence: number;
-    mbs: number;
-    pupillary_distance: number;
-    face_width: number;
-    face_height: number;
-    photo_data_url: string;
-    created_at: string;
-}
 
-export async function fetchSavedScans(): Promise<SavedScan[]> {
-    return apiFetch("/api/saved-scans");
-}
-
-export async function deleteSavedScan(id: number): Promise<void> {
-    await apiFetch(`/api/saved-scans/${id}`, { method: "DELETE" });
-}

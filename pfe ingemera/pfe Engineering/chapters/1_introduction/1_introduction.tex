@@ -1,0 +1,76 @@
+\part {Introduction}
+\label{chap:introduction}
+
+\chapter{General Introduction}
+
+\section {Context and Motivation}
+\label{sec:intro_context}
+
+The integration of artificial intelligence into e-commerce has fundamentally transformed how consumers interact with digital storefronts. Specifically within the eyewear industry, the traditional purchasing process relies heavily on physical store visits. Customers browse frames guided by a human optician, who recommends glasses based on the customer's facial geometry and personal style. 
+
+This project presents **OptiVision**, a next-generation **e-commerce platform specifically designed for the online sale of glasses**. The core motivation of OptiVision is to eliminate the need for physical store visits by completely digitizing the role of the human optician. 
+
+To achieve this, the platform seamlessly integrates three cutting-edge technologies:
+\begin{enumerate}
+    \item \textbf{Face Shape Classification:} The system uses computer vision to automatically scan the user's face, extracting precise landmarks to categorize their facial geometry (e.g., Oval, Round, Square, Heart, Long).
+    \item \textbf{3D Simulation (Virtual Try-On):} Once the face shape is detected, the platform uses augmented reality to project 3D models of the glasses directly onto the user's face in real-time, allowing them to visualize the fit instantly.
+    \item \textbf{AI Chatbot Optician:} An intelligent conversational agent acts as the digital optician. It interprets the user's face shape classification and uses it to intelligently filter the vast catalog of glasses, recommending only the frames that will flatter the user's specific geometry.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{The Digital Optician: Combining Face Shape AI, 3D Try-On, and Chatbot Filtering}
+    \label{fig:optivision_concept}
+\end{figure}
+
+By acting as a virtual optician, the chatbot guides the user through the entire e-commerce journey—from face scanning to final purchase—providing a highly personalized, frictionless shopping experience.
+
+\section{Problem Statement}
+\label{sec:intro_problem}
+
+Building an e-commerce platform that successfully replaces a human optician presents several major technical challenges:
+
+\begin{itemize}
+    \item \textbf{Real-time Processing:} For the virtual try-on to be convincing, the face detection and 3D simulation must occur simultaneously and seamlessly within the web browser.
+    \item \textbf{Intelligent Filtering via Chatbot:} The chatbot cannot simply be a generic FAQ answering machine; it must act as a filtering engine. It needs to connect the AI's geometric findings (face shape) to the e-commerce backend to curate personalized product lists.
+    \item \textbf{System Integration:} The application must flawlessly unite an AI inference model, a 3D rendering engine, a conversational chatbot, and a secure e-commerce shopping cart into one unified interface.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{E-commerce Workflow for the Sale of Glasses via OptiVision}
+    \label{fig:ecommerce_workflow}
+\end{figure}
+
+\section{Objectives}
+\label{sec:intro_objectives}
+
+To overcome these challenges and successfully build the OptiVision platform, this project pursues the following objectives:
+
+\begin{enumerate}[label=\textbf{O\arabic*.}]
+    \item \textbf{Face Shape Classification Pipeline:} Implement a pipeline using MediaPipe and a CNN to accurately classify the user's face shape.
+    \item \textbf{Virtual Try-On Engine:} Incorporate 3D rendering (Three.js) to allow real-time 3D simulation of glasses on the user's face.
+    \item \textbf{Digital Optician Chatbot:} Integrate a conversational AI that filters the eyewear catalog and recommends products tailored to the user's detected face shape.
+    \item \textbf{E-Commerce Frontend:} Build a responsive, interactive storefront using React, Vite, and TypeScript.
+    \item \textbf{Backend Architecture:} Develop a secure RESTful API using FastAPI and PostgreSQL to manage the glasses inventory and user orders.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Project Objectives: Building the Digital Optician}
+    \label{fig:project_objectives}
+\end{figure}
+
+\section{Outline}
+\label{sec:intro_outline}
+
+The remainder of this document is structured as follows:
+\begin{description}
+    \item[\textbf{Part II: Background and Technical Foundation}] Details the web frameworks, 3D rendering, and computer vision technologies used, alongside the e-commerce business model.
+    \item[\textbf{Part III: Requirements Analysis}] Details the system requirements and UML modeling for the platform.
+    \item[\textbf{Part IV: Methodology}] Describes the AI pipeline, the CelebA dataset, the hybrid model architecture, and the final e-commerce integration.
+    \item[\textbf{Part V: Conclusion}] Summarises the success of the digital optician integration and proposes future features.
+\end{description}

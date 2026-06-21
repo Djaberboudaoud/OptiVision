@@ -9,8 +9,6 @@ import AdminLogin from "./pages/AdminLogin";
 import GererStock from "./pages/GererStock";
 import AdminOrders from "./pages/AdminOrders";
 import AdminNotifications from "./pages/AdminNotifications";
-import AdminSavedScans from "./pages/AdminSavedScans";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -26,7 +24,6 @@ const App = () => (
           <Route path="/DjAbEr/gerer_stock" element={<GererStock />} />
           <Route path="/DjAbEr/orders" element={<AdminOrders />} />
           <Route path="/DjAbEr/notifications" element={<AdminNotifications />} />
-          <Route path="/DjAbEr/saved-scans" element={<AdminSavedScans />} />
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -7,8 +7,6 @@ from app.models.client import Client
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.notification import Notification
-from app.models.saved_scan import SavedScan
-
 __all__ = [
     "AdminUser",
     "GlassesModel",
@@ -16,5 +14,4 @@ __all__ = [
     "Order",
     "OrderItem",
     "Notification",
-    "SavedScan",
 ]

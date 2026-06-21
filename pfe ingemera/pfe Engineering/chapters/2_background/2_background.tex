@@ -1,0 +1,197 @@
+\part{Background and Technical Foundation}
+\label{chap:background}
+
+\chapter{Technical Foundation}
+
+\section{Introduction}
+\label{sec:back_intro}
+Developing a modern, intelligent web application like OptiVision requires a robust understanding of both web development frameworks and artificial intelligence concepts. This chapter provides the theoretical and technical background necessary to understand the architecture and methodology presented in this thesis. It covers the core technologies used in the frontend and backend, as well as the fundamental principles of computer vision and machine learning applied to face shape classification.
+
+The evolution of e-commerce has mandated a shift from simple, static product catalogs to highly interactive, personalized experiences. This requires a synergistic approach, merging cloud-based backend architectures, dynamic frontend rendering engines, and machine learning models capable of processing visual data in real-time. The technologies chosen for OptiVision—FastAPI, React, Vite, Three.js, and MediaPipe—were selected precisely to meet these rigorous demands.
+
+\section{Business Model Study: Smart Glasses Guide (OptiVision)}
+\label{sec:back_business}
+Before delving into the technical implementation, it is crucial to understand the business context of OptiVision. The application is designed to revolutionize the eyewear e-commerce industry by integrating AI-driven personalized recommendations. The business model centers on reducing return rates and increasing customer satisfaction through virtual try-ons.
+
+Below is the detailed Business Model Canvas for the OptiVision platform:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Bissnis model canvas.png}
+    \caption{OptiVision Business Model Canvas}
+    \label{fig:business_model}
+\end{figure}
+
+\subsection{Partenaires Clés}
+\begin{itemize}
+    \item Marques et fabricants de lunettes
+    \item Opticiens et magasins d'optique
+    \item Fournisseurs de technologies IA, AR et Computer Vision (MediaPipe, Three.js, WebAR)
+    \item Hébergeurs cloud (AWS, Firebase)
+    \item Fournisseurs de passerelles de paiement
+    \item Services de livraison et logistique
+    \item Influenceurs et créateurs de contenu mode
+\end{itemize}
+
+\subsection{Activités Clés}
+\begin{itemize}
+    \item Développement et maintenance de la plateforme
+    \item Intégration et entraînement des modèles IA
+    \item Création et optimisation des modèles 3D de lunettes
+    \item Analyse de données et amélioration continue
+    \item Marketing digital et acquisition d'utilisateurs
+    \item Support client et amélioration de l'expérience utilisateur
+\end{itemize}
+
+\subsection{Proposition de Valeur}
+\begin{itemize}
+    \item Recommandation personnalisée grâce à l'IA qui analyse la forme du visage et les préférences.
+    \item Essayage virtuel 3D en temps réel pour visualiser les lunettes avant l'achat.
+    \item Expérience d'achat plus sûre et plus rapide, réduisant le risque de mauvaises décisions.
+    \item Solution innovante, moderne et accessible, disponible partout sur le web.
+\end{itemize}
+
+\subsection{Relation Clients}
+\begin{itemize}
+    \item Assistance via chatbot IA 24/7 (assistant opticien qui conseille, répond et guide l'utilisateur).
+    \item Recommandations personnalisées.
+    \item Comptes utilisateurs et préférences enregistrées.
+    \item Programme de fidélité et offres spéciales.
+    \item Support après-vente et collecte de feedback.
+\end{itemize}
+
+\subsection{Segments de Clients}
+\textbf{Cible principale:}
+\begin{itemize}
+    \item Personnes souhaitant acheter des lunettes en ligne.
+    \item Jeunes et adolescents connectés.
+    \item Utilisateurs intéressés par la mode et la technologie.
+    \item Personnes ayant des difficultés à choisir des montures adaptées.
+\end{itemize}
+\textbf{Cibles secondaires:}
+\begin{itemize}
+    \item Opticiens et magasins d'optique.
+    \item Marques et fabricants de lunettes.
+    \item Utilisateurs professionnels (entreprises, écoles, etc.).
+\end{itemize}
+
+\subsection{Ressources Clés}
+\begin{itemize}
+    \item Plateforme web et application.
+    \item Moteur de recommandation IA.
+    \item Technologie de détection faciale et AR.
+    \item Base de données de montures 3D et produits.
+    \item Équipe de développement et d'experts.
+    \item Infrastructure cloud et bases de données.
+\end{itemize}
+
+\subsection{Canaux}
+\begin{itemize}
+    \item Application web responsive.
+    \item Réseaux sociaux (Facebook, Instagram, TikTok).
+    \item Publicité en ligne (Google Ads, Social Ads).
+    \item Partenariats avec opticiens et boutiques en ligne.
+    \item Email marketing et newsletters.
+\end{itemize}
+
+\subsection{Structure des Coûts \& Sources de Revenus}
+\begin{itemize}
+    \item Développement et maintenance de la plateforme.
+    \item Coûts des APIs IA (Gemini, etc.).
+    \item Hébergement cloud et domaines.
+    \item Commission sur les ventes de lunettes.
+    \item Abonnements pour opticiens et magasins.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Financial Projections and Market Adoption Curve}
+    \label{fig:financial_adoption}
+\end{figure}
+
+\section{Frontend and User Interfaces}
+\label{sec:back_frontend}
+
+The user interface is the primary point of interaction between the consumer and the e-commerce platform. In the context of virtual try-on, the frontend must not only be responsive and intuitive but also capable of handling complex multimedia tasks such as accessing the device camera, managing video streams, and rendering 3D graphics in real-time, all while maintaining a smooth frame rate.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Component Architecture of the React Frontend}
+    \label{fig:react_architecture}
+\end{figure}
+
+\subsection{React.js and Vite}
+React.js is an open-source JavaScript library for building user interfaces based on UI components. Maintained by Meta, React allows developers to create large web applications that can change data without reloading the page. Its core objective is to be fast, scalable, and simple, working exclusively on user interfaces in the application.
+
+Using Vite with React provides rapid hot module replacement (HMR), drastically reducing development cycle times. Unlike older bundlers like Webpack, which build the entire application before serving, Vite serves source code over native ESM, leading to near-instantaneous server starts.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Vite Build Process vs Traditional Bundlers}
+    \label{fig:vite_build}
+\end{figure}
+
+\subsection{TypeScript and Tailwind CSS}
+TypeScript is a strongly typed programming language that builds on JavaScript. By adding static typing, it helps catch errors early in the development process and improves code maintainability, which is essential for a complex project integrating 3D elements and AI APIs. 
+
+Tailwind CSS is a utility-first CSS framework packed with classes that can be composed to build any design directly in the markup. It ensures a consistent design system across the application and accelerates the styling process without writing custom CSS files.
+
+\subsection{3D Simulation and Rendering in the Browser}
+For virtual try-on features, rendering 3D models of eyewear is essential. Libraries like Three.js and React Three Fiber (a React reconciler for Three.js) enable the rendering of complex 3D scenes directly within the browser using WebGL. This allows for realistic visualization of products on the user's face in real-time. By leveraging the client's GPU, the platform can simulate lighting, shadows, and reflections on the glass lenses.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{WebGL Rendering Pipeline for 3D Eyewear Models}
+    \label{fig:webgl_pipeline}
+\end{figure}
+
+\section{Backend Development}
+\label{sec:back_backend}
+
+The backend architecture is responsible for managing business logic, ensuring data security, handling database operations, and providing a reliable API for the frontend to consume. For an e-commerce platform, this involves securely processing user data, maintaining product inventories, and serving recommendation logic.
+
+\subsection{FastAPI Framework}
+FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints. It is built on top of Starlette for the web parts and Pydantic for the data parts. FastAPI is designed to be highly performant, rivaling NodeJS and Go. Its key features include automatic interactive API documentation (via Swagger UI and ReDoc) and asynchronous programming support out of the box, making it highly suitable for I/O-bound operations typical in web servers.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Asynchronous Request Handling in FastAPI}
+    \label{fig:fastapi_async}
+\end{figure}
+
+\subsection{RESTful API Design and PostgreSQL}
+RESTful APIs allow different systems to communicate over HTTP using standard methods like GET, POST, PUT, and DELETE. A well-designed RESTful API ensures a decoupled architecture, allowing the frontend and backend to evolve independently.
+
+In the OptiVision project, PostgreSQL serves as the primary data store. It is a powerful, open-source object-relational database system with a strong reputation for reliability, feature robustness, and performance. Using SQLAlchemy's asynchronous extension (asyncpg), the backend can interact with the PostgreSQL database non-blocking, maximizing throughput and responsiveness.
+
+\section{Computer Vision, AI, and Chatbots}
+\label{sec:back_cv}
+
+A core differentiating feature of OptiVision is its intelligent recommendation engine and virtual try-on capability, which rely heavily on modern Computer Vision (CV) and Natural Language Processing (NLP) advancements.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Evolution of Computer Vision Architectures}
+    \label{fig:cv_evolution}
+\end{figure}
+
+\subsection{Face Landmark Tracking}
+Facial landmark tracking is the process of localizing predefined points on a human face, such as the corners of the eyes, the tip of the nose, and the contour of the jawline. Modern approaches, such as Google's MediaPipe, utilize deep neural networks to accurately predict hundreds of landmarks (e.g., 468 points) in real-time, even on mobile devices. Real-time tracking allows the system to continuously monitor the face's orientation, scale, and position, which is fundamental for pinning 3D objects (like glasses) to the user's face accurately.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{MediaPipe 468-Point Facial Mesh Topology}
+    \label{fig:mediapipe_mesh}
+\end{figure}
+
+\subsection{Chatbot Agent Integration (The Digital Optician)}
+Modern e-commerce platforms increasingly rely on AI-driven chatbot agents to assist users. In OptiVision, the chatbot serves a specific, crucial role: the digital optician. Utilizing large language models (LLMs), the chatbot interprets the results of the face shape classification and cross-references them with the product catalog. 
+
+When a user's face is classified as "Square," the chatbot proactively recommends frames with rounded edges (like Aviators or Round frames) to soften facial features, explaining the reasoning to the user. It can handle complex conversational queries, guide the user through the virtual try-on interface, and filter the glasses catalog dynamically based on user inputs, thereby perfectly simulating the consultative experience of an in-store optician.

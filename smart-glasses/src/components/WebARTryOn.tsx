@@ -18,9 +18,9 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { useGLTF } from '@react-three/drei';
 
 // @ts-ignore — vendor JS, no types
 import mirrorHelper from '../contrib/WebARRocksFace/helpers/WebARRocksMirror.js';
@@ -132,7 +132,7 @@ const VTOModelContainer: React.FC<VTOModelContainerProps> = ({
         mirrorHelper.set_faceFollower(threeObject3DParent, threeObject3D, faceIndex);
     }, [GLTFModel, sizing, faceIndex, glassesBranches]);
 
-    const gltf = useLoader(GLTFLoader, GLTFModel);
+    const gltf = useGLTF(GLTFModel);
     const model = useMemo(() => gltf.scene.clone(), [gltf]);
 
     return (

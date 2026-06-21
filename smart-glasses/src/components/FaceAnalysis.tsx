@@ -4,8 +4,6 @@ import { cn } from '@/lib/utils';
 import type { FaceAnalysisResult, Landmark, FaceShape } from '@/types/analysis';
 import { faceShapeDescriptions } from '@/data/glassesData';
 import { predictFaceShape, normalizeBackendFaceShape, type PredictionResponse } from '@/services/api';
-import { saveScanToBackend } from '@/services/savedScanApi';
-
 interface FaceAnalysisProps {
   imageUrl: string;
   imageFile: File;
@@ -521,40 +519,7 @@ export function FaceAnalysis({ imageUrl, imageFile, onAnalysisComplete }: FaceAn
         setIsLoading(false);
         onAnalysisComplete(analysisResult);
 
-        // ─── Auto-save the scan to IndexedDB (works for both webcam & file upload) ───
-        try {
-          let photoDataUrl: string;
 
-          // If we have the original File object, read it directly — most reliable for webcam blob URLs
-          if (imageFile) {
-            photoDataUrl = await new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(reader.result as string);
-              reader.onerror = reject;
-              reader.readAsDataURL(imageFile);
-            });
-          } else {
-            // Fallback: draw img to canvas (works for regular file uploads)
-            const saveCanvas = document.createElement('canvas');
-            saveCanvas.width = img.width;
-            saveCanvas.height = img.height;
-            saveCanvas.getContext('2d')!.drawImage(img, 0, 0);
-            photoDataUrl = saveCanvas.toDataURL('image/jpeg', 0.85);
-          }
-
-          await saveScanToBackend({
-            photoDataUrl,
-            faceShape: analysisResult.faceShape,
-            confidence: analysisResult.confidence,
-            mbs: analysisResult.mbs,
-            pupillaryDistance: analysisResult.measurements.pupillaryDistance,
-            faceWidth: analysisResult.measurements.faceWidth,
-            faceHeight: analysisResult.measurements.faceHeight,
-          });
-          console.log('✅ Scan auto-saved to Backend Database');
-        } catch (saveErr) {
-          console.warn('Could not auto-save scan:', saveErr);
-        }
       } catch (err) {
         setIsLoading(false);
         const errorMsg = err instanceof Error ? err.message : 'Analysis failed';

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { isAuthenticated, logout, fetchNotifications } from "@/lib/adminApi";
 import {
-    Package, ShoppingCart, Bell, LogOut, Glasses, Menu, X, BookImage
+    Package, ShoppingCart, Bell, LogOut, Glasses, Menu, X
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -36,7 +36,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const navItems = [
         { path: "/DjAbEr/gerer_stock", label: "المخزون", labelEn: "Stock", icon: Package },
         { path: "/DjAbEr/orders", label: "الطلبات", labelEn: "Orders", icon: ShoppingCart },
-        { path: "/DjAbEr/saved-scans", label: "الفحوصات", labelEn: "Scans", icon: BookImage },
         { path: "/DjAbEr/notifications", label: "الإشعارات", labelEn: "Notifications", icon: Bell, badge: unreadCount },
     ];
 

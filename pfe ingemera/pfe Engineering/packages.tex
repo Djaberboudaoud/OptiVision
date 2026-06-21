@@ -1,0 +1,183 @@
+% ============================================================
+% packages.tex  –  Overleaf / XeLaTeX (TeX Live 2021+)
+% Load layout & graphics BEFORE polyglossia (bidi) and biblatex.
+% Compiler: XeLaTeX  |  Biber
+% ============================================================
+
+% ── 1. FONT ENGINE ───────────────────────────────────────────
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\newfontfamily\arabicfont[Script=Arabic,Scale=1.4]{Amiri}
+
+% ── 2. MATH ──────────────────────────────────────────────────
+\usepackage{amsmath,amsfonts,amssymb}
+
+% ── 3. COLOURS & GRAPHICS (before bidi) ──────────────────────
+\usepackage[dvipsnames,table]{xcolor}
+\definecolor{chapterblue}{RGB}{0,70,127}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% ── 4. PAGE LAYOUT (before bidi) ─────────────────────────────
+\usepackage[top=2cm,bottom=1.5cm,left=3cm,right=2.5cm,headheight=15pt]{geometry}
+
+% ── 5. TABLES (before bidi) ───────────────────────────────────
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% ── 6. TIKZ / PLOTS / BOXES (before bidi) ───────────────────
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+% ── 7. SECTION TITLES ─────────────────────────────────────────
+\usepackage[explicit]{titlesec}
+
+% Part divider page — centred “Part II” + large title (like classic thesis)
+\renewcommand{\thepart}{\Roman{part}}
+\titleformat{\part}[display]
+  {%
+    \thispagestyle{empty}%
+    \vspace*{\fill}%
+    \centering%
+    \normalfont\bfseries%
+  }
+  {\fontsize{38}{42}\selectfont\partname~\thepart}
+  {0.6em}
+  {\fontsize{50}{54}\selectfont #1}
+  [\vspace*{\fill}]
+\titlespacing{\part}{0pt}{0pt}{0pt}
+
+\titleformat{\chapter}[display]
+  {\normalfont}
+  {}
+  {0pt}
+  {%
+    \begin{tcolorbox}[
+      enhanced,
+      colback=chapterblue!6,
+      colframe=chapterblue,
+      boxrule=1.2pt,
+      arc=0mm,
+      left=12pt, right=12pt, top=10pt, bottom=10pt,
+      width=\textwidth,
+      halign=flush left
+    ]
+    \color{chapterblue}%
+    \noindent\textbf{\large\chaptertitlename\ \thechapter}\endgraf \vspace{4pt}%
+    \noindent\hfill\textbf{\LARGE #1}%
+    \end{tcolorbox}%
+  }
+\titleformat{name=\chapter,numberless}[display]
+  {\normalfont}
+  {}
+  {0pt}
+  {%
+    \begin{tcolorbox}[
+      enhanced,
+      colback=chapterblue!6,
+      colframe=chapterblue,
+      boxrule=1.2pt,
+      arc=0mm,
+      left=12pt, right=12pt, top=10pt, bottom=10pt,
+      width=\textwidth,
+      halign=flush left
+    ]
+    \color{chapterblue}%
+    \noindent\hfill\textbf{\LARGE #1}%
+    \end{tcolorbox}%
+  }
+\titlespacing{\chapter}{0pt}{30pt}{24pt}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+
+\usepackage{titletoc}
+\contentsmargin{2.3em}
+
+% TOC: “III State of the Art ........ 48”, then “4 State of the art ........ 49”
+\titlecontents{part}[0em]
+  {\addvspace{1.2pc}\normalfont\bfseries\large}
+  {\thecontentslabel\quad}
+  {}
+  {\titlerule*[0.4pc]{.}\contentspage}
+
+\titlecontents{chapter}[1.25em]
+  {\addvspace{0.5pc}\normalfont\bfseries}
+  {\contentslabel{1.25em}}
+  {}
+  {\titlerule*[0.4pc]{.}\contentspage}
+
+\titlecontents{section}[2.75em]
+  {\normalfont}
+  {\contentslabel{2.75em}}
+  {}
+  {\titlerule*[0.4pc]{.}\contentspage}
+
+\titlecontents{subsection}[5em]
+  {\normalfont}
+  {\contentslabel{3.5em}}
+  {}
+  {\titlerule*[0.4pc]{.}\contentspage}
+
+\titlecontents{subsubsection}[7.25em]
+  {\normalfont}
+  {\contentslabel{4.25em}}
+  {}
+  {\titlerule*[0.4pc]{.}\contentspage}
+
+% ── 8. HEADERS (oneside: no LE/RE) ───────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\thepage}
+\fancyhead[L]{\small\leftmark}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── 9. MISC (before bidi) ───────────────────────────────────
+\usepackage{indentfirst}
+\usepackage{setspace}
+\setstretch{1.5}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{emptypage}
+\usepackage{pdflscape}
+\usepackage{footmisc}
+\usepackage[normalem]{ulem}
+\usepackage{acronym}
+\usepackage{lipsum}
+
+% ── 10. HYPERREF (before polyglossia / bidi) ─────────────────
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true,
+  urlcolor   = black,
+  linkcolor  = black,
+  citecolor  = black,
+  pdftitle   = {Comparative Study of Face Shape Classification Techniques},
+  pdfauthor  = {Your Name}
+}
+
+% ── 11. LANGUAGE (loads bidi — must be late) ───────────────────
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setotherlanguage[numerals=maghrib]{arabic}
+
+% ── 12. BIBLIOGRAPHY (after polyglossia) ─────────────────────
+\usepackage{csquotes}
+\usepackage[backend=biber,sorting=none,style=ieee]{biblatex}
+\addbibresource{references.bib}
+\defbibheading{bibintoc}[References]{%
+  \part{#1}%
+}
+
+% ── 13. CUSTOM COMMANDS ───────────────────────────────────────
+\newcommand{\keyterm}[1]{\textbf{\textit{#1}}}

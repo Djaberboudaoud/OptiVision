@@ -52,6 +52,14 @@ const Index = () => {
             webarModelFile: item.model_path ? `/glasses_models/${item.model_path}` : undefined,
           }));
           setApiGlasses(transformedGlasses);
+          
+          // Preload all GLB models in the background so they're instant when user clicks "Try On"
+          import('@/utils/gltfLoader').then(({ preloadModels }) => {
+            const modelUrls = transformedGlasses
+              .map((g: Glasses) => g.webarModelFile)
+              .filter((url: string | undefined): url is string => !!url);
+            preloadModels(modelUrls);
+          });
         }
       } catch (err) {
         console.error('Failed to load glasses from API', err);

@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper,openany]{report}
+% \documentclass[openany,12pt,oneside]{extreport}
+
+
+\input{packages}
+
+%%% ─── CUSTOM COMMANDS ────────────────────────────────────────────────────────
+% \newcommand{\keyterm}[1]{\textbf{\textit{#1}}}
+\newtheorem{definition}{Definition}[part]
+\newtheorem{theorem}{Theorem}[part]
+
+%% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+%% ── TITLE PAGE ───────────────────────────────────────────────────────────────
+\pagestyle{empty}
+\input{chapters/frontmatter/Titlepage}
+\clearpage
+
+%% ──────────────────────  FRONT MATTER  ───────────────────────────────────────
+\pagenumbering{Roman}
+\pagestyle{fancy}
+
+%% ── ACKNOWLEDGEMENTS ─────────────────────────────────────────────────────────
+\input{chapters/frontmatter/Acknowledgement}
+\clearpage
+
+%% ── ABSTRACT ─────────────────────────────────────────────────────────────────
+\input{chapters/0_abstract/0_abstract}
+\clearpage
+
+%% ── LISTS (listed in TOC before it is printed) ───────────────────────────────
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\newpage
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+
+%% ── LIST OF ABBREVIATIONS ────────────────────────────────────────────────────
+\input{chapters/frontmatter/Acronyms}
+\clearpage
+
+%% ── TABLE OF CONTENTS ────────────────────────────────────────────────────────
+\tableofcontents
+\clearpage
+
+%% ──────────────────────  MAIN MATTER  ────────────────────────────────────────
+\pagenumbering{arabic}
+\setcounter{page}{13}
+
+\input{chapters/1_introduction/1_introduction}
+\input{chapters/2_background/2_background}
+\input{chapters/3_requirements/3_requirements}
+\input{chapters/4_methodology/4_methodology}
+\input{chapters/5_conclusion/5_conclusion}
+
+%% ──────────────────────  BACK MATTER  ────────────────────────────────────────
+% Include all entries from references.bib (not only \cite{} keys)
+\nocite{*}
+\printbibliography[heading=bibintoc]
+
+\end{document}

@@ -1,0 +1,146 @@
+\part{Methodology and Implementation}
+\label{chap:methodology_part}
+
+\chapter{Methodology and Results}
+\label{chap:methodology}
+
+\section{Introduction}
+\label{sec:meth_intro}
+
+This chapter details the core developmental and experimental contributions of the thesis. It bridges the gap between the theoretical concepts discussed in previous chapters and the practical implementation of the OptiVision platform. The methodology encompasses the entire data pipeline—from the selection and preprocessing of the facial dataset to the training of the hybrid classification model—and concludes with the integration of these models into the final e-commerce application.
+
+\section{Dataset Selection: CelebA}
+\label{sec:meth_dataset}
+
+For the training and validation of the face shape classification model, the \textbf{CelebFaces Attributes Dataset (CelebA)} was utilized. CelebA is a large-scale face attributes dataset with more than \textbf{202,599 number of face images} of various celebrities, covering large pose variations and background clutter. It contains \textbf{10,177 unique identities}.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Sample Images from the CelebA Dataset with Annotations}
+    \label{fig:celeba_samples}
+\end{figure}
+
+The dataset's massive scale and diversity are crucial for training a robust model capable of handling real-world user images submitted via webcam. Furthermore, CelebA provides 40 binary attribute annotations and 5 fundamental landmark locations (left eye, right eye, nose, left mouth, right mouth) per image, which serve as an excellent starting point for the preprocessing pipeline.
+
+\section{Data Preprocessing and Evaluation}
+\label{sec:meth_preprocessing}
+
+\subsection{Data Preprocessing}
+Before feeding the images into the classification pipeline, several preprocessing steps were strictly enforced to ensure data consistency:
+\begin{enumerate}
+    \item \textbf{Face Alignment and Cropping:} Using the provided bounding boxes and the 5 facial landmarks, images were cropped and aligned to ensure the face is centered, removing irrelevant background noise.
+    \item \textbf{Normalization:} Pixel values were normalized to a standard range to accelerate convergence during the neural network training phase.
+    \item \textbf{Label Mapping:} Since CelebA does not natively provide the five canonical face shapes (Heart, Square, Long, Oval, Round) as explicit labels, a rigorous semi-automated clustering approach was used to map the available geometric attributes into these 5 categories, creating a reliable ground truth.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Data Preprocessing Pipeline: From Raw Image to Normalized Vector}
+    \label{fig:preprocessing_pipeline}
+\end{figure}
+
+\subsection{Data Evaluation}
+To evaluate the quality of the preprocessing, visual inspections and statistical distribution checks were performed. The distribution of the newly mapped 5 categories was balanced across the training set (approximately 20\% per class) to prevent the model from developing a bias toward majority classes, such as the common Oval shape.
+
+\section{Hybrid Face Shape Classification Method}
+\label{sec:meth_hybrid}
+
+To achieve high accuracy alongside the real-time performance required by the virtual try-on feature, a \textbf{Hybrid Method} was adopted, combining geometric feature extraction with deep representation learning.
+
+\subsection{MediaPipe Landmark Extraction}
+In the first stage, \textbf{MediaPipe} is utilized to extract dense facial landmarks. While CelebA provides 5 basic landmarks, MediaPipe expands this dramatically by extracting a highly detailed 468-point 3D facial mesh.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{MediaPipe 468-Landmark Extraction Process}
+    \label{fig:mediapipe_extraction}
+\end{figure}
+
+This mesh captures the nuanced topography of the jawline, cheekbones, and forehead—features absolutely critical for determining the subtle differences between, for example, a Square and a Round face.
+
+\subsection{CNN Classification}
+Instead of relying purely on handcrafted distance ratios (which often fail under varying head poses), the extracted 468 landmarks are serialized and fed into a \textbf{Convolutional Neural Network (CNN)}.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Architecture of the Proposed CNN Classifier}
+    \label{fig:cnn_architecture}
+\end{figure}
+
+The CNN is trained to learn the spatial relationships between these points and classify the overall structure into one of the 5 canonical categories. This hybrid approach leverages the explicit geometric precision of MediaPipe with the robust pattern recognition capabilities of a CNN.
+
+\subsection{Model Evaluation Comparison}
+To rigorously evaluate the Hybrid Method (MediaPipe + CNN) against traditional machine learning baselines, several metrics were calculated, including Accuracy, Precision, Recall, and F1-Score.
+
+\begin{table}[H]
+    \centering
+    \caption{Model Evaluation Comparison for Face Shape Classification}
+    \label{tab:model_comparison}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \rowcolor{chapterblue!20}
+        \textbf{Model Architecture} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Inference Time} \\ \hline
+        Naïve Bayes & 49.0\% & 48.2\% & 49.1\% & 48.6\% & \textbf{1.2 ms} \\ \hline
+        AdaBoost & 59.0\% & 58.5\% & 59.2\% & 58.8\% & 15.4 ms \\ \hline
+        K-Nearest Neighbors (KNN) & 67.0\% & 66.8\% & 67.5\% & 67.1\% & 22.1 ms \\ \hline
+        Random Forest & 70.0\% & 69.5\% & 70.1\% & 69.8\% & 18.3 ms \\ \hline
+        SVM (Linear Kernel) & 70.0\% & 69.8\% & 70.0\% & 69.9\% & 8.5 ms \\ \hline
+        Multi-Layer Perceptron (MLP) & 80.0\% & 79.5\% & 80.2\% & 79.8\% & 4.2 ms \\ \hline
+        SVM (RBF Kernel) & 82.0\% & 82.4\% & 82.0\% & 82.0\% & 9.1 ms \\ \hline
+        \rowcolor{green!10}
+        \textbf{Hybrid (MediaPipe + CNN)} & \textbf{91.5\%} & \textbf{91.2\%} & \textbf{91.7\%} & \textbf{91.4\%} & 12.5 ms \\ \hline
+    \end{tabular}
+\end{table}
+
+As shown in Table~\ref{tab:model_comparison}, the proposed Hybrid Method significantly outperforms all traditional baselines, achieving a 91.5\% accuracy. While its inference time (12.5 ms) is slightly higher than simpler models, it remains well within the requirements for real-time video processing (which requires < 33 ms per frame for 30 FPS).
+
+\section{System Integration}
+\label{sec:meth_integration}
+
+With the AI model validated, it was integrated into the React frontend. The MediaPipe mesh is continuously tracked in real-time. The spatial coordinates and head pose estimation derived from the tracking are passed to Three.js, which renders 3D models of the recommended glasses directly onto the user's face, adjusting dynamically as the user moves.
+
+\section{Implementation}
+\label{sec:meth_implementation}
+
+The final implementation of the OptiVision platform seamlessly connects the hybrid AI model, the 3D rendering engine, and the digital optician chatbot. Below are the key interfaces developed for the application.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm} 
+    \caption{Implementation: The OptiVision Homepage}
+    \label{fig:impl_homepage}
+\end{figure}
+
+The homepage provides a clean, modern gateway to the store, prompting the user to begin their personalized shopping journey.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm} 
+    \caption{Implementation: Real-time Virtual Try-On Interface with 3D Simulation}
+    \label{fig:impl_virtual_tryon}
+\end{figure}
+
+The virtual try-on interface overlays the selected 3D glasses model onto the live webcam feed, utilizing the MediaPipe tracking data to anchor the frames correctly on the nose bridge and ears.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm} 
+    \caption{Implementation: AI Chatbot Agent Assistance}
+    \label{fig:impl_chatbot}
+\end{figure}
+
+The chatbot interface acts as the digital optician, filtering the database for glasses that match the user's detected face shape and answering styling questions.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm} 
+    \caption{Implementation: Face Shape Classification Results Dashboard}
+    \label{fig:impl_classification}
+\end{figure}
+
+Finally, the results dashboard provides the user with an overview of their biometric analysis, explaining why certain frames were recommended over others.

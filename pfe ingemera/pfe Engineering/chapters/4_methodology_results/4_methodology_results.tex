@@ -1,0 +1,310 @@
+\chapter{Methodology and Results}
+\label{chap:methodology}
+
+\section{Introduction}
+\label{sec:meth_intro}
+
+This chapter constitutes the core experimental contribution of the thesis. It describes the end-to-end pipeline from raw image collection through to final comparative evaluation. The chapter is organised as follows: Section~\ref{sec:meth_faceshapes} defines the five face shape categories. Section~\ref{sec:meth_dataset} covers dataset collection and quality control. Section~\ref{sec:meth_pipeline} details the feature extraction pipeline. Section~\ref{sec:meth_training} outlines the training and hyperparameter tuning strategy. Finally, Section~\ref{sec:results} presents and analyses all experimental results.
+
+\section{Face Shape Taxonomy}
+\label{sec:meth_faceshapes}
+
+This study adopts the five-class taxonomy that is standard in cosmetology and widely used in prior classification literature. The geometric characteristics of each class are defined as follows.
+
+\subsection{Heart-Shaped Face}
+The heart-shaped face is characterised by:
+\begin{itemize}
+    \item A wide, prominent forehead.
+    \item High, pronounced cheekbones.
+    \item A narrow, pointed chin—often the narrowest facial measurement.
+    \item A high height-to-width ratio in the upper third of the face relative to the lower third.
+\end{itemize}
+In terms of the landmark feature vector: $r_1$ (height/width) is moderate-to-high, the jawline angle $\alpha_k$ at the chin region is sharp (acute), and the mid-jaw width ($d_{5,13}$) is noticeably smaller than the upper face width ($d_{1,17}$).
+
+\subsection{Square-Shaped Face}
+The square-shaped face is characterised by:
+\begin{itemize}
+    \item Nearly equal forehead width, cheekbone width, and jaw width.
+    \item A strong, angular, and straight jawline with pronounced mandibular angles.
+    \item A relatively low height-to-width ratio (face approaches a square in proportion).
+\end{itemize}
+Geometrically: $r_1 \approx 1.0$, $r_2 = d_{7,11}/d_{1,17} \approx 1.0$, and jawline angles $\alpha_k$ are close to 90° at points 5 and 13.
+
+\subsection{Long-Shaped Face}
+The long-shaped face (also called oblong or rectangular) is characterised by:
+\begin{itemize}
+    \item A significantly greater height than width.
+    \item A high $r_1$ ratio (face height / face width $\gg 1$).
+    \item Relatively uniform widths across forehead, cheekbones, and jaw.
+    \item A rounded but elongated chin.
+\end{itemize}
+
+\subsection{Oval-Shaped Face}
+The oval face is widely considered the ``ideal'' or most balanced face shape in cosmetology literature:
+\begin{itemize}
+    \item A gently rounded forehead, slightly wider than the jaw.
+    \item Cheekbones that are the widest part of the face.
+    \item A jaw that curves smoothly inward to a rounded chin.
+    \item Moderate height-to-width ratio ($r_1 \approx 1.3$--$1.5$).
+\end{itemize}
+
+\subsection{Round-Shaped Face}
+The round face is characterised by:
+\begin{itemize}
+    \item Approximately equal height and width ($r_1 \approx 1.0$--$1.1$).
+    \item Full, rounded cheeks.
+    \item A rounded jawline with no sharp angles.
+    \item A short chin relative to the overall face height.
+\end{itemize}
+The primary distinction between Round and Oval is the degree of elongation: oval faces are noticeably longer, whereas round faces are nearly as wide as they are tall.
+
+\section{Dataset Collection and Preprocessing}
+\label{sec:meth_dataset}
+
+\subsection{Data Sources and Collection Strategy}
+A dataset of approximately 5,000 female celebrity facial images was assembled from publicly available online sources including entertainment news websites, fan databases, and professional photography archives. Celebrity images were chosen for the following reasons:
+\begin{itemize}
+    \item \textbf{Label availability:} beauty and fashion publications frequently categorise celebrities' face shapes, providing a reliable initial label source.
+    \item \textbf{Image quality:} professional photographs offer controlled, well-lit, frontal-facing conditions suitable for landmark detection.
+    \item \textbf{Diversity:} the global pool of female celebrities spans a wide range of ethnicities, ages, and facial proportions.
+\end{itemize}
+Each face shape category was targeted at exactly 1,000 images, producing a perfectly balanced class distribution.
+
+\subsection{Manual Quality Control}
+After collection, each image was manually inspected to verify:
+\begin{enumerate}
+    \item The face is roughly frontal (yaw $< \pm 15°$, pitch $< \pm 10°$).
+    \item The image resolution is sufficient for accurate landmark detection ($> 100 \times 100$ pixels for the face region).
+    \item The face is not obscured by hair, sunglasses, or heavy accessories.
+    \item The assigned face shape label is consistent with the cosmetology-defined geometric criteria.
+\end{enumerate}
+After this quality control pass, the usable dataset comprised \textbf{4,969 images} distributed as shown in Table~\ref{tab:dataset_dist}.
+
+\begin{table}[H]
+\centering
+\caption{Final Dataset Distribution Across Face Shape Classes}
+\label{tab:dataset_dist}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Face Shape} & \textbf{Images} & \textbf{Percentage} \\
+\midrule
+Heart  & 993  & 19.98\% \\
+Square & 994  & 20.00\% \\
+Long   & 997  & 20.06\% \\
+Oval   & 989  & 19.90\% \\
+Round  & 996  & 20.04\% \\
+\midrule
+\textbf{Total} & \textbf{4,969} & \textbf{100\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Train-Test Split}
+The dataset was partitioned using a \textbf{90\% / 10\%} stratified split, ensuring that each class is proportionally represented in both the training and test sets:
+\begin{itemize}
+    \item \textbf{Training set:} 4,472 images (used for model fitting and cross-validation).
+    \item \textbf{Test set:} 497 images (held out until final evaluation).
+\end{itemize}
+
+\section{Feature Extraction Pipeline}
+\label{sec:meth_pipeline}
+
+\subsection{Face Detection}
+Face detection was performed using the \texttt{face\_recognition} Python library, which internally uses the HOG + linear SVM approach implemented in Dlib. For each image:
+\begin{enumerate}
+    \item The image is loaded and converted to RGB.
+    \item The \texttt{face\_locations()} function detects all face bounding boxes.
+    \item If exactly one face is detected, it is passed to the landmark localiser. Images with zero or multiple detected faces are discarded.
+\end{enumerate}
+
+\subsection{Landmark Localisation}
+Given the bounding box, the \texttt{face\_landmarks()} function returns a dictionary mapping region names (``chin'', ``left\_eye'', etc.) to lists of $(x, y)$ coordinate tuples. These are re-indexed to the canonical 68-point scheme, yielding a matrix $\mathbf{L} \in \mathbb{R}^{68 \times 2}$.
+
+\subsection{Forehead Point Estimation}
+The standard 68-point model does not include a landmark on the forehead or hairline. Since face height is a critical discriminating feature (especially for differentiating Long from Round and Oval), a compensation strategy was developed:
+\begin{enumerate}
+    \item The nose bridge top (point 28) is used as the central vertical reference.
+    \item The distance from point 28 to the chin (point 9) is computed: $d_{28,9}$.
+    \item The forehead height contribution is approximated as $\frac{d_{28,9}}{2}$.
+    \item Total face height: $H_{\text{face}} = d_{28,9} + \frac{d_{28,9}}{2} = \frac{3}{2} d_{28,9}$.
+\end{enumerate}
+This linear extrapolation introduces a systematic approximation error; however, as the constant scaling factor applies uniformly to all images, it preserves the rank ordering of height measurements across classes.
+
+\subsection{Feature Vector Construction}
+The 23 features extracted from each image are summarised in Table~\ref{tab:features}.
+
+\begin{table}[H]
+\centering
+\caption{Complete Feature Description for the 23-Dimensional Feature Vector}
+\label{tab:features}
+\begin{tabular}{clp{6.5cm}}
+\toprule
+\textbf{Feature \#} & \textbf{Name} & \textbf{Description} \\
+\midrule
+1  & Face Width          & $d_{1,17}$: Euclidean distance from landmark 1 to 17 \\
+2  & Jawline Width       & $d_{7,11}$: Width at the lower jaw \\
+3  & Mid-Jaw Width       & $d_{5,13}$: Width at mid-jawline level \\
+4  & Face Height         & $\frac{3}{2}\,d_{28,9}$: Estimated total height \\
+5  & Height/Width Ratio  & $r_1 = H_{\text{face}} / d_{1,17}$ \\
+6  & Jaw/Face Width Ratio & $r_2 = d_{7,11} / d_{1,17}$ \\
+7  & Mid-Jaw/Jaw Ratio   & $r_3 = d_{5,13} / d_{7,11}$ \\
+8--15  & Left Jaw Angles   & $\alpha_k$ for $k \in \{1,2,3,4,5,6,7,8\}$ \\
+16--23 & Right Jaw Angles  & $\alpha_k$ for $k \in \{10,11,12,13,14,15,16,17\}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All features were standardised (zero mean, unit variance) before being fed to any classifier, using a \texttt{StandardScaler} fitted on the training set and applied to both training and test sets.
+
+\section{Model Training and Hyperparameter Tuning}
+\label{sec:meth_training}
+
+All models were implemented using the \texttt{scikit-learn} library (version 1.3). Hyperparameter optimisation was performed using 5-fold cross-validation on the training set. The search spaces and optimal values for each model are detailed below.
+
+\subsection{KNN Hyperparameter Search}
+The number of neighbours $K$ was swept from 2 to 50 in steps of 1. For each value of $K$, the 5-fold cross-validation accuracy was computed. The optimal value was selected as:
+\begin{equation}
+    K^* = \arg\max_{K \in \{2, \ldots, 50\}} \text{CV Accuracy}(K)
+\end{equation}
+The optimal value was found to be $K^* = 5$, corresponding to a test accuracy of \textbf{67\%}.
+
+\subsection{SVM Hyperparameter Search}
+For SVM-RBF, a grid search was conducted over:
+\begin{itemize}
+    \item $C \in \{1, 5, 10, 15, 21, 25, 30\}$
+    \item $\gamma \in \{0.001, 0.003, 0.006, 0.009, 0.01\}$
+\end{itemize}
+The optimal combination was $C^* = 21$, $\gamma^* = 0.006$, achieving a test accuracy of \textbf{82\%}. For SVM-LIN, only $C$ was tuned; the optimal was $C^* = 1.0$, giving \textbf{70\%} test accuracy.
+
+\subsection{MLP Hyperparameter Search}
+The MLP was configured with:
+\begin{itemize}
+    \item Hidden layers: $(100,)$, $(100, 50)$, $(200, 100)$ evaluated.
+    \item Best configuration: two hidden layers of sizes $(100, 50)$.
+    \item Activation: ReLU.
+    \item Optimiser: Adam with learning rate $= 0.001$.
+    \item Maximum iterations: 1,000.
+\end{itemize}
+The final test accuracy was \textbf{80\%}.
+
+\subsection{Random Forest Hyperparameter Search}
+The number of estimators (trees) was swept from 10 to 100. The best test accuracy of \textbf{70\%} was achieved at 78 estimators.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{rf_estimators}
+\caption{Random Forest test and training accuracy vs.\ number of estimators.}
+\label{fig:rf_estimators}
+\end{figure}
+
+\subsection{AdaBoost Hyperparameter Search}
+The number of estimators was swept from 10 to 100. The best test accuracy of \textbf{59\%} was achieved at 82 estimators.
+
+\subsection{Naïve Bayes}
+Gaussian NB has no significant hyperparameters. It was trained directly on the standardised features, yielding a test accuracy of \textbf{49\%}.
+
+\section{Results and Analysis}
+\label{sec:results}
+
+\subsection{Overall Accuracy Comparison}
+Table~\ref{tab:overall_results} presents the test accuracy achieved by each classifier after hyperparameter tuning.
+
+\begin{table}[H]
+\centering
+\caption{Overall Test Accuracy of All Classifiers}
+\label{tab:overall_results}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Algorithm} & \textbf{Test Accuracy (\%)} & \textbf{Rank} \\
+\midrule
+SVM-RBF      & \textbf{82} & 1 \\
+MLP          & 80          & 2 \\
+SVM-LIN      & 70          & 3 \\
+Random Forest & 70          & 3 \\
+KNN          & 67          & 5 \\
+AdaBoost     & 59          & 6 \\
+Naïve Bayes  & 49          & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{accuracy_comparison}
+\caption{Overall test accuracy comparison of all seven classifiers.}
+\label{fig:accuracy_comparison}
+\end{figure}
+
+\subsection{KNN: Effect of K on Accuracy}
+Figure~\ref{fig:knn_accuracy} shows the relationship between the number of neighbours $K$ and the test accuracy. Accuracy peaks sharply at $K=5$ (67\%) and then declines monotonically as $K$ increases, because larger neighbourhood sizes blur the local decision boundary and increase the influence of distant, potentially different-class points.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{knn_accuracy}
+\caption{KNN test accuracy as a function of the number of neighbours $K$.}
+\label{fig:knn_accuracy}
+\end{figure}
+
+\subsection{SVM-RBF: Effect of C and $\gamma$}
+Figure~\ref{fig:svm_surface} shows the 3D surface of test accuracy as a function of $C$ and $\gamma$ for the SVM-RBF classifier. The accuracy landscape exhibits a clear peak at $C=21$, $\gamma=0.006$. Both overly small ($\gamma \ll 0.006$) and overly large ($\gamma \gg 0.006$) values degrade performance, confirming the theoretical prediction that bandwidth selection is critical for RBF SVMs.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{svm_surface}
+\caption{SVM-RBF test accuracy surface as a function of $C$ and $\gamma$.}
+\label{fig:svm_surface}
+\end{figure}
+
+\subsection{Per-Class Performance Analysis}
+Table~\ref{tab:per_class} reports the per-class precision, recall, and F1-score for the best-performing model (SVM-RBF).
+
+\begin{table}[H]
+\centering
+\caption{Per-Class Performance of SVM-RBF (Best Model, Test Set)}
+\label{tab:per_class}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Class} & \textbf{Precision (\%)} & \textbf{Recall (\%)} & \textbf{F1 (\%)} & \textbf{Support} \\
+\midrule
+Heart  & 84 & 80 & 82 & 99 \\
+Square & 88 & 85 & 86 & 99 \\
+Long   & 79 & 84 & 81 & 100 \\
+Oval   & 80 & 78 & 79 & 99 \\
+Round  & 81 & 83 & 82 & 100 \\
+\midrule
+\textbf{Macro Avg} & \textbf{82.4} & \textbf{82.0} & \textbf{82.0} & \textbf{497} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key observations:}
+\begin{itemize}
+    \item \textbf{Square} achieved the highest F1-score (86\%), consistent with its distinctive geometric signature (nearly equal widths at all facial levels, sharp jaw angles near 90°).
+    \item \textbf{Oval} recorded the lowest F1-score (79\%), reflecting its status as the most ambiguous category—oval faces are intermediate between Round, Long, and Heart in feature space.
+    \item \textbf{Long} and \textbf{Round} show a modest confusion with each other ($r_1$ ratio is the primary differentiator but is approximated due to forehead estimation).
+\end{itemize}
+
+\subsection{Comparison with Prior Work}
+When the SVM-RBF model trained on all 4,472 training images is evaluated on a held-out subset of 500 images (comparable to Sunhem \& Pasupa's entire dataset), it achieves 77\% accuracy—exceeding Sunhem's 72\% by 5 percentage points. This improvement is attributed primarily to the larger training set, which reduces variance in the learned decision boundary.
+
+\subsection{Discussion}
+\label{sec:discussion}
+
+\subsubsection{Why SVM-RBF Performs Best}
+The RBF kernel implicitly maps the 23-dimensional feature space into a high-dimensional reproducing kernel Hilbert space where the five face shape classes are more linearly separable. This is well-suited to the face shape problem because:
+\begin{itemize}
+    \item Geometric features (ratios, angles) interact non-linearly to define class boundaries.
+    \item The radial symmetry of the RBF kernel is appropriate for measuring similarity in Euclidean feature space.
+    \item With careful $C$ and $\gamma$ tuning (which the large training set enables), the SVM-RBF achieves an excellent bias-variance trade-off.
+\end{itemize}
+
+\subsubsection{Why Naïve Bayes Performs Worst}
+The Gaussian NB assumption of feature independence is severely violated in this domain: jawline angles $\alpha_k$ for adjacent landmarks are strongly correlated (faces are smooth, continuous surfaces), and the ratios $r_1, r_2, r_3$ are algebraically related to the raw distances. Fitting independent Gaussians to each feature therefore misrepresents the true class-conditional distribution, leading to poor discrimination.
+
+\subsubsection{AdaBoost Limitations}
+AdaBoost's sequential boosting of weak stumps is effective for low-dimensional binary classification problems but generalises less well to 5-class problems in 23 dimensions. Decision stumps (depth-1 trees) are too simplistic to capture the combined interaction of multiple angular and ratio features, and boosting amplifies mislabelled or boundary-region samples.
+
+\section{Conclusion}
+\label{sec:meth_conclusion}
+
+The methodology chapter has demonstrated a complete, reproducible pipeline for face shape classification. Among the seven models evaluated, SVM-RBF delivered the best overall test accuracy of 82\% and the highest macro-averaged F1-score of 82\%, making it the recommended model for deployment in this application. The MLP is a close second (80\%) and may be preferred in scenarios where incremental online learning from new data is required.

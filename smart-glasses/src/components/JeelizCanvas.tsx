@@ -10,8 +10,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
+import { loadGLTFModel } from '../utils/gltfLoader';
 // Backend URL for serving model assets
 const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://opti-vision-backend.vercel.app';
 
@@ -260,17 +259,10 @@ const JeelizCanvas: React.FC<JeelizCanvasProps> = ({
                             }
 
                             if (glbModelFile) {
-                                // ===== GLB MODEL =====
-                                console.log('Loading GLB model:', glbModelFile);
-                                const loader = new GLTFLoader();
-
-                                // Load occlusion model first (or in parallel, but here simplified)
-                                // We assume occluder is always at this path for GLB mode
+                                // Load occlusion model first
                                 const occluderPath = '/models/occluder.glb';
 
-                                loader.load(occluderPath, (occluderGltf) => {
-                                    const occluderScene = occluderGltf.scene;
-
+                                loadGLTFModel(occluderPath).then((occluderScene) => {
                                     // Manually set up the occluder as a depth-write only mesh
                                     occluderScene.traverse((child: any) => {
                                         if (child.isMesh) {
@@ -281,12 +273,10 @@ const JeelizCanvas: React.FC<JeelizCanvasProps> = ({
 
                                     threeStuffs.faceObject.add(occluderScene);
                                     occluderObjRef.current = occluderScene as any;
-                                }, undefined, (err) => console.log('Occluder load missing/error', err)); // Optional
+                                }).catch((err) => console.log('Occluder load missing/error', err));
 
-                                loader.load(
-                                    glbModelFile,
-                                    (gltf) => {
-                                        const glbScene = gltf.scene;
+                                loadGLTFModel(glbModelFile).then(
+                                    (glbScene) => {
 
                                         // Tweak materials for branch bending/fading
                                         glbScene.traverse((child: any) => {
@@ -329,11 +319,8 @@ const JeelizCanvas: React.FC<JeelizCanvasProps> = ({
                                         glassesObjRef.current = glbScene;
 
                                         console.log('GLB model loaded successfully, scale:', scaleFactor);
-                                        setIsLoading(false);
-                                    },
-                                    (progress) => {
-                                        console.log('GLB loading progress:', Math.round((progress.loaded / (progress.total || 1)) * 100) + '%');
-                                    },
+                                    }
+                                ).catch(
                                     (err) => {
                                         console.error('Failed to load GLB model:', err);
                                         setError('Failed to load glasses model');
@@ -424,10 +411,8 @@ const JeelizCanvas: React.FC<JeelizCanvasProps> = ({
         // We will just reload the GLB on prop change.
 
         console.log('Switching GLB model to:', glbModelFile);
-        const loader = new GLTFLoader();
 
-        loader.load(glbModelFile, (gltf) => {
-            const glbScene = gltf.scene;
+        loadGLTFModel(glbModelFile).then((glbScene) => {
 
             // Tweak materials
             const glassesBranchesSpec = {
@@ -521,10 +506,8 @@ const JeelizCanvas: React.FC<JeelizCanvasProps> = ({
         // But since we don't track the loaded file path in a ref, we just reload conformantly.
 
         console.log('Switching GLB model to:', glbModelFile);
-        const loader = new GLTFLoader();
 
-        loader.load(glbModelFile, (gltf) => {
-            const glbScene = gltf.scene;
+        loadGLTFModel(glbModelFile).then((glbScene) => {
 
             // Tweak materials
             const glassesBranchesSpec = {

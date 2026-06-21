@@ -1,0 +1,37 @@
+\part{Conclusion}
+\label{chap:conclusion_part}
+
+\chapter*{Conclusion and Future Work}
+\addcontentsline{toc}{chapter}{Conclusion and Future Work}
+
+This thesis presented the design, implementation, and evaluation of OptiVision, an intelligent e-commerce platform tailored for the eyewear industry. By bridging the gap between traditional manual consultation and digital retail, the project successfully demonstrated how artificial intelligence can be seamlessly integrated into modern web architectures to completely digitize the role of the human optician.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Summary of OptiVision System Contributions}
+    \label{fig:conclusion_summary}
+\end{figure}
+
+At the core of the system is the face shape classification module, which serves as the foundation for the platform's personalized recommendations. Moving beyond subjective human assessment, the project utilized facial landmark detection (extracting 468 points via MediaPipe) and fed them into a Convolutional Neural Network (CNN). This Hybrid method achieved a state-of-the-art accuracy of 91.5\% on the CelebA dataset subset, significantly outperforming traditional models like SVM-RBF (82\%).
+
+To deploy this predictive model effectively, a modern, decoupled web architecture was developed. The backend, built with FastAPI and PostgreSQL, established a secure, high-performance foundation for data persistence, user authentication, and product catalog management. The frontend, leveraging React, Vite, and Tailwind CSS, delivered a responsive and engaging user interface. 
+
+Crucially, the integration of client-side 3D rendering (via Three.js) enabled real-time virtual try-on capabilities. When combined with the conversational AI chatbot acting as a digital optician, the platform successfully replicated the in-store experience: analyzing the user's face, dynamically filtering the catalog for flattering frames, answering stylistic questions, and allowing the user to instantly "try on" the recommendations.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Proposed Future Architecture for V2}
+    \label{fig:future_architecture}
+\end{figure}
+
+While the current iteration of OptiVision represents a significant step forward, there are several promising avenues for future research and development:
+\begin{itemize}
+    \item \textbf{Dataset Expansion:} Expanding the training dataset to include a more diverse demographic distribution across ages and ethnicities to improve the CNN model's generalization and fairness.
+    \item \textbf{Advanced 3D Modeling:} Enhancing the virtual try-on experience by incorporating precise 3D facial depth scans and lighting estimation to render eyewear with photorealistic shadows and reflections (e.g., lens glare).
+    \item \textbf{Expanded AI Capabilities:} Upgrading the chatbot optician to analyze current fashion trends via web scraping and incorporating the user's skin tone and eye color into the recommendation matrix.
+    \item \textbf{Mobile Application:} Porting the frontend application to cross-platform mobile frameworks (such as React Native or Flutter) to reach a broader audience with native mobile AR capabilities.
+\end{itemize}
+
+Overall, OptiVision serves as a robust proof-of-concept for the next generation of intelligent retail platforms. It highlights the vast potential of combining computer vision, natural language processing, and advanced web technologies to solve real-world problems, digitize professional expertise, and fundamentally enhance the consumer journey.

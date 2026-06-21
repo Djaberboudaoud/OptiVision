@@ -4,7 +4,7 @@ Create & Update accept multipart form data (files + fields).
 """
 import logging
 import shutil
-import uuid
+import subprocess
 from pathlib import Path
 from typing import Optional
 
@@ -23,10 +23,12 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/glasses", tags=["Glasses"])
 
-# Upload directories (relative to backend root)
+# Upload directories (relative to backend root, pointing to frontend public)
 BACKEND_ROOT = Path(__file__).parent.parent.parent
-PHOTOS_DIR = BACKEND_ROOT / "glasses_photos"
-MODELS_DIR = BACKEND_ROOT / "glasses_models"
+FRONTEND_PUBLIC = BACKEND_ROOT.parent / "smart-glasses" / "public"
+
+PHOTOS_DIR = FRONTEND_PUBLIC / "glasses_photos"
+MODELS_DIR = FRONTEND_PUBLIC / "glasses_models"
 try:
     PHOTOS_DIR.mkdir(exist_ok=True)
 except OSError:
@@ -39,12 +41,41 @@ except OSError:
 
 
 def _save_file(upload: UploadFile, dest_dir: Path) -> str:
-    """Save an uploaded file with a unique name, return the filename."""
+    """Save an uploaded file with a unique name, return the filename. If it is a GLB, compress it using Draco."""
+    import uuid
     ext = Path(upload.filename).suffix.lower() if upload.filename else ""
     filename = f"{uuid.uuid4().hex}{ext}"
     filepath = dest_dir / filename
+    
+    # Save the original file
     with open(filepath, "wb") as f:
         shutil.copyfileobj(upload.file, f)
+        
+    # Compress if it's a GLB file
+    if ext == ".glb":
+        logger.info(f"Compressing newly uploaded GLB model: {filename}")
+        temp_filepath = dest_dir / f"{filename}.temp.glb"
+        try:
+            # Call gltf-pipeline via npx to compress the model with Draco
+            subprocess.run(
+                ["npx", "-y", "gltf-pipeline", "-i", str(filepath), "-o", str(temp_filepath), "-d"],
+                check=True,
+                capture_output=True,
+                shell=True # Required on Windows for npx
+            )
+            # Replace original with compressed if successful
+            if temp_filepath.exists():
+                shutil.move(str(temp_filepath), str(filepath))
+                logger.info(f"Successfully compressed {filename} with Draco")
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Failed to compress {filename}. Keeping original. Error: {e.stderr}")
+            if temp_filepath.exists():
+                temp_filepath.unlink()
+        except Exception as e:
+            logger.error(f"Failed to compress {filename} due to unexpected error: {e}")
+            if temp_filepath.exists():
+                temp_filepath.unlink()
+                
     return filename
 
 

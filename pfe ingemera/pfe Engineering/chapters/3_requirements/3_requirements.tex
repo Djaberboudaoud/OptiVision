@@ -1,0 +1,163 @@
+\chapter{Requirements Analysis}
+\label{chap:requirements}
+
+\section{Introduction}
+\label{sec:req_intro}
+The requirements analysis phase is a fundamental step in the software development lifecycle. It defines what the OptiVision system must do and the constraints under which it must operate. This chapter outlines the functional and non-functional requirements, identifies the key actors, and models the system's behavior using Unified Modeling Language (UML) diagrams, including Use Case, Activity, and Sequence diagrams.
+
+By clearly delineating the expectations for the platform, the development team can ensure that the final product accurately serves both the business goals—selling eyewear effectively—and the user's need for a guided, personalized shopping experience.
+
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Software Development Life Cycle for OptiVision}
+    \label{fig:sdlc_optivision}
+\end{figure}
+
+\section{Functional Requirements Specification}
+\label{sec:req_functional}
+Functional requirements define the specific behaviors and functions the system must support. For OptiVision, these requirements are categorized into core domains: User Management, Product Management, Customer Experience, and Order Processing.
+
+\subsection{User Management and Authentication}
+The system must support distinct user roles, primarily Customers and Administrators. 
+\begin{itemize}
+    \item \textbf{Registration and Login:} Users must be able to create an account using an email address and secure password.
+    \item \textbf{Profile Management:} Users can update their personal information, shipping addresses, and view their face shape classification history.
+    \item \textbf{Security:} Passwords must be securely hashed using bcrypt, and session management must utilize JSON Web Tokens (JWT) for stateless authentication.
+\end{itemize}
+
+\subsection{Product Management Requirements}
+Administrators require comprehensive tools to manage the eyewear inventory to keep the catalog up to date.
+\begin{itemize}
+    \item \textbf{Inventory CRUD Operations:} Admins must be able to Create, Read, Update, and Delete eyewear models from the PostgreSQL database.
+    \item \textbf{3D Asset Association:} Each product must be linkable to a specific 3D model file (.glb/.gltf) required for the virtual try-on feature.
+    \item \textbf{Categorization:} Products must be categorizable by frame style, face shape suitability (e.g., "Best for Square faces"), brand, and price.
+\end{itemize}
+
+\subsection{Customer Experience Requirements (Virtual Try-on \& AI Optician)}
+This is the core value proposition of OptiVision, replacing the physical store visit.
+\begin{itemize}
+    \item \textbf{Real-Time Camera Access:} The application must request and securely handle access to the user's webcam via standard WebRTC browser APIs.
+    \item \textbf{Face Shape Classification:} The system must capture video frames, process the facial landmarks via MediaPipe, and classify the face shape (Heart, Square, Long, Oval, Round) within 2 seconds.
+    \item \textbf{Virtual Try-On Simulation:} The system must render 3D eyewear accurately onto the user's face, tracking movement and rotation in real-time.
+    \item \textbf{Digital Optician Chatbot:} The system must provide a conversational AI interface capable of filtering the product catalog based on the detected face shape and answering user queries regarding style and fit.
+\end{itemize}
+
+\subsection{Order Management Requirements}
+To complete the e-commerce loop, robust order processing is required.
+\begin{itemize}
+    \item \textbf{Shopping Cart:} Users can add, remove, and modify quantities of items in their cart.
+    \item \textbf{Checkout Process:} A secure checkout flow integrating third-party payment gateways must be implemented.
+    \item \textbf{Order Tracking:} Customers must be able to view the status of their active and past orders from their profile dashboard.
+\end{itemize}
+
+\section{Non-Functional Requirements Specification}
+\label{sec:req_nonfunctional}
+Non-functional requirements specify criteria that can be used to judge the operation of a system, rather than specific behaviors.
+
+\subsection{Usability Requirements}
+The interface must be highly intuitive, especially the virtual try-on component. The application must be fully responsive, providing a seamless experience across desktop, tablet, and mobile devices. The chatbot interface must mimic a natural conversation, ensuring users feel guided rather than confused by the AI.
+
+\subsection{Security Requirements}
+Given the handling of personal data and biometric information (facial video streams), strict adherence to data protection regulations is mandatory. Facial data processed for the virtual try-on must occur entirely client-side when possible, and no video feeds should be stored permanently on the server without explicit user consent. Payment processing must be PCI-DSS compliant.
+
+\subsection{Performance Requirements}
+The virtual try-on feature requires high frame rates (minimum 30 FPS) for a smooth experience, meaning the 3D rendering and facial tracking cycle must execute in under 33 milliseconds per frame. The backend API must respond to standard database queries within 200ms to ensure the frontend remains snappy.
+
+\section{Identification of Actors}
+\label{sec:req_actors}
+An actor represents a role played by an entity that interacts with the system.
+
+\subsection{Administrators (Permissions-Based Access)}
+Administrators have elevated privileges. They are responsible for managing the product catalog, uploading 3D assets, viewing overall sales statistics, and managing user accounts. They access the system via a secure, dedicated admin dashboard route.
+
+\subsection{Customers}
+Customers are the primary end-users. They interact with the storefront, use the AI features (camera and chatbot) to find suitable glasses, add items to their cart, and complete purchases.
+
+\section{Use Case Diagrams}
+\label{sec:req_usecase}
+Use case diagrams model the dynamic behavior of the system from the user's perspective, mapping out the interactions between the identified actors and the system's core modules.
+
+\subsection{User Management Use Cases}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Use Case Diagram: User Management}
+    \label{fig:uc_user_management}
+\end{figure}
+
+\subsection{Product and Virtual Try-On Use Cases}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Use Case Diagram: Product Management and Virtual Try-On}
+    \label{fig:uc_product_management}
+\end{figure}
+
+\subsection{Order Management Use Cases}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Use Case Diagram: Order Management}
+    \label{fig:uc_order_management}
+\end{figure}
+
+\section{Activity Diagrams}
+\label{sec:req_activity}
+Activity diagrams graphically represent the workflows of stepwise activities and actions. They are particularly useful for detailing complex processes like the virtual try-on and the checkout flow.
+
+\subsection{Virtual Try-On and Classification Process}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Activity Diagram: Face Shape Classification and Try-On}
+    \label{fig:act_tryon}
+\end{figure}
+
+\subsection{Place Order Process}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Activity Diagram: Place Order Process}
+    \label{fig:act_place_order}
+\end{figure}
+
+\subsection{Order Tracking and Cancellation Process}
+\begin{figure}[H]
+    \centering
+    \vspace{8cm}
+    \caption{Activity Diagram: Order Tracking and Cancellation}
+    \label{fig:act_tracking}
+\end{figure}
+
+\section{Sequence Diagrams}
+\label{sec:req_sequence}
+Sequence diagrams detail how operations are carried out, identifying what messages are sent between the frontend client, the backend API, the AI models, and the database, and in what chronological order.
+
+\subsection{Customer Authentication and Virtual Try-On}
+\begin{figure}[H]
+    \centering
+    \vspace{9cm}
+    \caption{Sequence Diagram: Customer Login and Virtual Try-On Initialization}
+    \label{fig:seq_customer_login}
+\end{figure}
+
+\subsection{Product Creation (Admin)}
+\begin{figure}[H]
+    \centering
+    \vspace{9cm}
+    \caption{Sequence Diagram: Product Creation}
+    \label{fig:seq_product_creation}
+\end{figure}
+
+\subsection{AI Chatbot Interaction (The Digital Optician)}
+\begin{figure}[H]
+    \centering
+    \vspace{9cm}
+    \caption{Sequence Diagram: AI Chatbot Inquiry and Product Filtering}
+    \label{fig:seq_chatbot}
+\end{figure}
+
+\section{Conclusion}
+\label{sec:req_conclusion}
+This chapter comprehensively outlined the requirements analysis for the OptiVision system. By defining the functional and non-functional requirements and modeling the system's interactions through UML diagrams, a clear blueprint has been established. This blueprint ensures that the development of the AI models and the e-commerce architecture remain aligned with the primary goal: providing a digital optician experience.
