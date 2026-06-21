@@ -84,8 +84,8 @@ const Index = () => {
           compatibleFaces: ['oval', 'round', 'heart', 'square', 'oblong'],
           price: item.selling_price,
           colors: item.frame_color ? [item.frame_color] : ['Black'],
-          modelFile: undefined,
-          webarModelFile: undefined,
+          modelFile: item.model_path,
+          webarModelFile: item.model_path ? `/glasses_models/${item.model_path}` : undefined,
         }));
         setChatFilteredGlasses(transformed);
       });
